@@ -1,37 +1,18 @@
 local Created = false;
 
 local function gbombs5settings( CPanel )
-	sounds={}
-	sounds[1]="vo/npc/male01/answer39.wav"
-	sounds[2]="vo/npc/male01/answer35.wav"
-	sounds[3]="vo/npc/male01/doingsomething.wav"
-	sounds[4]="vo/npc/male01/answer38.wav"
 	Created = true;
 
-	local logo = vgui.Create( "DImageButton" );
+	local logo = vgui.Create( "DImage" );
 	logo:SetImage( "hud/gbombs.png" );
 	logo:SetSize( 300, 300 );
-	LocalPlayer().clicks = 0
-	logo.DoClick = function()
-		LocalPlayer().clicks = LocalPlayer().clicks + 1
-		if LocalPlayer().clicks >=5 then
-			LocalPlayer():ConCommand("kill")
-			LocalPlayer():ConCommand("say I'm an idiot who can't stop clicking!\n")
-			LocalPlayer().clicks = 0
-			local snd = Sound( "vo/npc/male01/answer11.wav");
-			surface.PlaySound( snd );
-			
-		else			
-			local snd = Sound( table.Random(sounds) );
-			surface.PlaySound( snd );
-		end
-	end
+	logo.DoClick = function() end
 
 	CPanel:AddPanel( logo );
 		
 	local shockwave = CPanel:AddControl( "CheckBox", { Label = "Should all bombs unweld and unfreeze?", Command = "gb5_shockwave_unfreeze" } );
 	shockwave.OnChange = function( panel, bVal ) 
-		if( LocalPlayer():IsSuperAdmin() and !Created ) then
+		if( LocalPlayer():IsSuperAdmin() and not Created ) then
 			if( ( bVal and 1 or 0 ) == cvars.Number( "gb5_shockwave_unfreeze" ) ) then return end
 			net.Start( "gbombs5_cvar" );
 				net.WriteString( "gb5_shockwave_unfreeze" );
@@ -41,7 +22,7 @@ local function gbombs5settings( CPanel )
 	end
 	local realsound = CPanel:AddControl( "CheckBox", { Label = "Should the sound travel realistically?", Command = "gb5_realistic_sound" } );
 	realsound.OnChange = function( panel, bVal ) 
-		if( LocalPlayer():IsSuperAdmin() and !Created ) then
+		if( LocalPlayer():IsSuperAdmin() and not Created ) then
 			if( ( bVal and 1 or 0 ) == cvars.Number( "gb5_realistic_sound" ) ) then return end
 			net.Start( "gbombs5_cvar" );
 				net.WriteString( "gb5_realistic_sound" );
@@ -53,7 +34,7 @@ local function gbombs5settings( CPanel )
 	local max_field = CPanel:NumSlider( "Forcefield Max Range", "", 10, 10000, 0 );
 	max_field.Scratch.ConVarChanged = function() end
 	max_field.OnValueChanged = function( panel, val )
-		if( LocalPlayer():IsSuperAdmin() and !JustMade ) then
+		if( LocalPlayer():IsSuperAdmin() and not JustMade ) then
 			net.Start( "gbombs5_cvar" );
 				net.WriteString( "gb5_maxforcefield_range" );
 				net.WriteFloat( math.Round( tonumber( val ) ) );
@@ -63,7 +44,7 @@ local function gbombs5settings( CPanel )
 	
 	local decals = CPanel:AddControl( "CheckBox", { Label = "Should bombs leave decals behind?", Command = "gb5_decals" } );
 	decals.OnChange = function( panel, bVal ) 
-		if( LocalPlayer():IsSuperAdmin() and !Created ) then
+		if( LocalPlayer():IsSuperAdmin() and not Created ) then
 			if( ( bVal and 1 or 0 ) == cvars.Number( "gb5_shockwave_unfreeze" ) ) then return end
 			net.Start( "gbombs5_cvar" );
 				net.WriteString( "gb5_decals" );
@@ -74,7 +55,7 @@ local function gbombs5settings( CPanel )
 	
 	local easyuse = CPanel:AddControl( "CheckBox", { Label = "Should bombs be easily armed?", Command = "gb5_easyuse" } );
 	easyuse.OnChange = function( panel, bVal ) 
-		if( LocalPlayer():IsSuperAdmin() and !Created ) then
+		if( LocalPlayer():IsSuperAdmin() and not Created ) then
 			if( ( bVal and 1 or 0 ) == cvars.Number( "gb5_easyuse" ) ) then return end
 			net.Start( "gbombs5_cvar" );
 				net.WriteString( "gb5_easyuse" );
@@ -85,7 +66,7 @@ local function gbombs5settings( CPanel )
 	
 	local fragility = CPanel:AddControl( "CheckBox", { Label = "Should bombs arm when hit or dropped?", Command = "gb5_fragility" } );
 	fragility.OnChange = function( panel, bVal ) 
-		if( LocalPlayer():IsSuperAdmin() and !Created ) then
+		if( LocalPlayer():IsSuperAdmin() and not Created ) then
 			if( ( bVal and 1 or 0 ) == cvars.Number( "gb5_fragility" ) ) then return end
 			net.Start( "gbombs5_cvar" );
 				net.WriteString( "gb5_fragility" );
@@ -96,7 +77,7 @@ local function gbombs5settings( CPanel )
 	
 	local emp = CPanel:AddControl( "CheckBox", { Label = "Should air detonated nukes produce emp?", Command = "gb5_nuclear_emp" } );
 	emp.OnChange = function( panel, bVal ) 
-		if( LocalPlayer():IsSuperAdmin() and !Created ) then
+		if( LocalPlayer():IsSuperAdmin() and not Created ) then
 			if( ( bVal and 1 or 0 ) == cvars.Number( "gb5_nuclear_emp" ) ) then return end
 			net.Start( "gbombs5_cvar" );
 				net.WriteString( "gb5_nuclear_emp" );
@@ -106,7 +87,7 @@ local function gbombs5settings( CPanel )
 	end
 	local safeemp = CPanel:AddControl( "CheckBox", { Label = "Should the server reduce emp lag?", Command = "gb5_safeemp" } );
 	safeemp.OnChange = function( panel, bVal ) 
-		if( LocalPlayer():IsSuperAdmin() and !Created ) then
+		if( LocalPlayer():IsSuperAdmin() and not Created ) then
 			if( ( bVal and 1 or 0 ) == cvars.Number( "gb5_safeemp" ) ) then return end
 			net.Start( "gbombs5_cvar" );
 				net.WriteString( "gb5_safeemp" );
@@ -116,7 +97,7 @@ local function gbombs5settings( CPanel )
 	end
 	local sh = CPanel:AddControl( "CheckBox", { Label = "Should there be sound shake?", Command = "gb5_sound_shake" } );
 	sh.OnChange = function( panel, bVal ) 
-		if( LocalPlayer():IsSuperAdmin() and !Created ) then
+		if( LocalPlayer():IsSuperAdmin() and not Created ) then
 			if( ( bVal and 1 or 0 ) == cvars.Number( "gb5_sound_shake" ) ) then return end
 			net.Start( "gbombs5_cvar" );
 				net.WriteString( "gb5_sound_shake" );
@@ -126,7 +107,7 @@ local function gbombs5settings( CPanel )
 	end
 	local fallout = CPanel:AddControl( "CheckBox", { Label = "Should there be nuclear fallout?", Command = "gb5_nuclear_fallout" } );
 	fallout.OnChange = function( panel, bVal ) 
-		if( LocalPlayer():IsSuperAdmin() and !Created ) then
+		if( LocalPlayer():IsSuperAdmin() and not Created ) then
 			if( ( bVal and 1 or 0 ) == cvars.Number( "gb5_nuclear_fallout" ) ) then return end
 			net.Start( "gbombs5_cvar" );
 				net.WriteString( "gb5_fallout" );
@@ -136,7 +117,7 @@ local function gbombs5settings( CPanel )
 	end
 	local nmrih = CPanel:AddControl( "CheckBox", { Label = "Use NMRiH zombies instead of default hl2 zombies for t-virus?", Command = "gb5_nmrih_zombies" } );
 	nmrih.OnChange = function( panel, bVal ) 
-		if( LocalPlayer():IsSuperAdmin() and !Created ) then
+		if( LocalPlayer():IsSuperAdmin() and not Created ) then
 			if( ( bVal and 1 or 0 ) == cvars.Number( "gb5_safeemp" ) ) then return end
 			net.Start( "gbombs5_cvar" );
 				net.WriteString( "gb5_nmrih_zombies" );
@@ -144,14 +125,15 @@ local function gbombs5settings( CPanel )
 			net.SendToServer();
 		end
 	end
-	local advanced = vgui.Create( "DImageButton" );
+	local advanced = vgui.Create( "DImage" );
 	advanced:SetImage( "hud/advanced.png" );
 	advanced:SetSize( 495, 50 );
+	advanced.DoClick = function() end
 	CPanel:AddPanel( advanced  );
 	local sound_speed = CPanel:NumSlider( "Sound speed multiplier", "", -2, 2, 0 );
 	sound_speed.Scratch.ConVarChanged = function() end
 	sound_speed.OnValueChanged = function( panel, val )
-		if( LocalPlayer():IsSuperAdmin() and !JustMade ) then
+		if( LocalPlayer():IsSuperAdmin() and not JustMade ) then
 			net.Start( "gbombs5_cvar" );
 				net.WriteString( "gb5_sound_speed" );
 				net.WriteFloat( math.Round( tonumber( val ) ) );
@@ -162,7 +144,7 @@ local function gbombs5settings( CPanel )
 	local zombie_strength = CPanel:NumSlider( "Zombie strength multiplier", "", -2, 2, 0 );
 	zombie_strength.Scratch.ConVarChanged = function() end
 	zombie_strength.OnValueChanged = function( panel, val )
-		if( LocalPlayer():IsSuperAdmin() and !JustMade ) then
+		if( LocalPlayer():IsSuperAdmin() and not JustMade ) then
 			net.Start( "gbombs5_cvar" );
 				net.WriteString( "gb5_zombie_strength" );
 				net.WriteFloat( math.Round( tonumber( val ) ) );
@@ -172,7 +154,7 @@ local function gbombs5settings( CPanel )
 	
 	local nukelight = CPanel:AddControl( "CheckBox", { Label = "Should nukes emit bright light (Single-Player Only)", Command = "gb5_nuke_light" } );
 	nukelight.OnChange = function( panel, bVal ) 
-		if( LocalPlayer():IsSuperAdmin() and !Created ) then
+		if( LocalPlayer():IsSuperAdmin() and not Created ) then
 			if( ( bVal and 1 or 0 ) == cvars.Number( "gb5_nuke_light" ) ) then return end
 			net.Start( "gbombs5_cvar" );
 				net.WriteString( "gb5_nuke_light" );
@@ -231,9 +213,6 @@ local function gbombs5settings( CPanel )
 	end );
 
 end
-
-
-
 
 hook.Add( "PopulateToolMenu", "PopulateGbombsMenus", function()
 

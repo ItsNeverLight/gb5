@@ -64,14 +64,14 @@ function ENT:Initialize()
 	 self.Used     = false
 	 self.Arming = false
 	 self.Exploding = false
-	  if !(WireAddon == nil) then self.Inputs   = Wire_CreateInputs(self, { "Arm", "Detonate" }) end
+	  if not (WireAddon == nil) then self.Inputs   = Wire_CreateInputs(self, { "Arm", "Detonate" }) end
 	end
 end
 
 
 if SERVER then
 	function ENT:Explode()
-		 if !self.Exploded then return end
+		 if not self.Exploded then return end
 		 if self.Exploding then return end
 		
 		 local pos = self:LocalToWorld(self:OBBCenter())
@@ -189,14 +189,14 @@ if SERVER then
 		 end
 		 for k, v in pairs(ents.FindInSphere(pos,350)) do
 			 if (v:IsValid() or v:IsPlayer()) and (v.forcefielded==false or v.forcefielded==nil) then
-				if v:IsPlayer() && !v:IsNPC() then
+				if v:IsPlayer() and not v:IsNPC() then
 					v:SetModel("models/Humans/Charple04.mdl")
 					ParticleEffectAttach("nuke_player_vaporize_fatman",PATTACH_POINT_FOLLOW,ent,0) 
 					v:Kill()
 				end
 			 end
 		 end
-		 if !self:IsValid() then return end  
+		 if not self:IsValid() then return end  
 		 self:SetModel("models/gibs/scanner_gib02.mdl")
 		 self.Exploding = true
 		 self:StopParticles()
@@ -232,7 +232,7 @@ if SERVER then
 			if trace.HitWorld then
 				 ParticleEffect(self.Effect,pos,Angle(0,0,0),nil)	
 				 timer.Simple(1, function()
-					 if !self:IsValid() then return end 
+					 if not self:IsValid() then return end 
 					 self:Remove()
 				end)	
 			else 
@@ -250,7 +250,7 @@ if SERVER then
 end
 
 function ENT:SpawnFunction( ply, tr )
-     if ( !tr.Hit ) then return end
+     if ( not tr.Hit ) then return end
 	 self.GBOWNER = ply
      local ent = ents.Create( self.ClassName )
 	 ent:SetPhysicsAttacker(ply)

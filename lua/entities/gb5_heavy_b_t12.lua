@@ -50,7 +50,7 @@ ENT.GBOWNER                          =  nil             -- don't you fucking tou
 ENT.Decals                           = "scorch_big_3"
 
 function ENT:SpawnFunction( ply, tr )
-     if ( !tr.Hit ) then return end
+     if ( not tr.Hit ) then return end
      self.GBOWNER = ply
      local ent = ents.Create( self.ClassName )
      ent:SetPhysicsAttacker(ply)
@@ -62,7 +62,7 @@ function ENT:SpawnFunction( ply, tr )
 end
 
 function ENT:Explode()
-	if !self.Exploded then return end
+	if not self.Exploded then return end
 	local pos = self:LocalToWorld(self:OBBCenter())
 
 	local ent = ents.Create("gb5_shockwave_ent")

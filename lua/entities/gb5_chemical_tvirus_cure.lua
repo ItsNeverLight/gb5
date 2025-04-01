@@ -69,7 +69,7 @@ function ENT:Initialize()
 	 self.Exploded = false
 	 self.Used     = false
 	 self.Arming   = false
-	  if !(WireAddon == nil) then self.Inputs   = Wire_CreateInputs(self, { "Arm", "Detonate" }) end
+	  if not (WireAddon == nil) then self.Inputs   = Wire_CreateInputs(self, { "Arm", "Detonate" }) end
 	end
 end
 
@@ -89,7 +89,7 @@ function ENT:Explode()
 				v:EmitSound("gbombs_5/tvirus_infection/infection_sign.mp3")
 			end
 		end
-		if v:IsNPC() && table.HasValue(ZombieList,v:GetClass()) then
+		if v:IsNPC() and table.HasValue(ZombieList,v:GetClass()) then
 			if math.random(1,4)==4 then
 				local ent = ents.Create("npc_citizen") 
 				ent:SetPos(v:GetPos())
@@ -104,7 +104,7 @@ function ENT:Explode()
 end
 
 function ENT:SpawnFunction( ply, tr )
-     if ( !tr.Hit ) then return end
+     if ( not tr.Hit ) then return end
      self.GBOWNER = ply
      local ent = ents.Create( self.ClassName )
      ent:SetPhysicsAttacker(ply)

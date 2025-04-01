@@ -52,7 +52,7 @@ ENT.GBOWNER                          =  nil             -- don't you fucking tou
 
 
 function ENT:SpawnFunction( ply, tr )
-     if ( !tr.Hit ) then return end
+     if ( not tr.Hit ) then return end
      self.GBOWNER = ply
      local ent = ents.Create( self.ClassName )
      ent:SetPhysicsAttacker(ply)
@@ -84,12 +84,12 @@ function ENT:SpawnCrystals()
 end
 
 function ENT:Explode()
-    if !self.Exploded then return end
+    if not self.Exploded then return end
 	local pos = self:LocalToWorld(self:OBBCenter())
 	self:SetMoveType( MOVETYPE_NONE )
 	self:SetMaterial("phoenix_storms/glass")
 	self:SetModel("models/hunter/plates/plate.mdl")
-	-- Removed for being too buggy: self:SpawnCrystals()
+	self:SpawnCrystals()
 
 	
 	
@@ -136,7 +136,7 @@ function ENT:Explode()
 			 ent:SetVar("Shocktime",1)
 			 
 			 timer.Simple(1, function()
-				 if !self:IsValid() then return end
+				 if not self:IsValid() then return end
 				 local ent = ents.Create("gb5_shockwave_ent")
 				 ent:SetPos( pos ) 
 				 ent:Spawn()
@@ -162,7 +162,7 @@ function ENT:Explode()
 		 nbc:Activate()
 	 end
 	 timer.Simple(1, function()
-		if !self:IsValid() then return end
+		if not self:IsValid() then return end
 		self:Remove()
 	 end)
 end

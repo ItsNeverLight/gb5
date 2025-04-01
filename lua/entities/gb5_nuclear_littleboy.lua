@@ -66,13 +66,13 @@ function ENT:Initialize()
 	 self.Used     = false
 	 self.Arming = false
 	 self.Exploding = false
-	  if !(WireAddon == nil) then self.Inputs   = Wire_CreateInputs(self, { "Arm", "Detonate" }) end
+	  if not (WireAddon == nil) then self.Inputs   = Wire_CreateInputs(self, { "Arm", "Detonate" }) end
 	end
 end
 
 
 function ENT:Explode()
-     if !self.Exploded then return end
+     if not self.Exploded then return end
 	 if self.Exploding then return end
      local pos = self:LocalToWorld(self:OBBCenter())
 	 
@@ -85,7 +85,7 @@ function ENT:Explode()
 	 end
 	 for k, v in pairs(ents.FindInSphere(pos,self.SpecialRadius)) do
 		if (v:IsValid() or v:IsPlayer()) and (v.forcefielded==false or v.forcefielded==nil) then
-			if v:IsPlayer() && !v:IsNPC() then
+			if v:IsPlayer() and not v:IsNPC() then
 			    v:SetModel("models/Humans/Charple04.mdl")
 				ParticleEffectAttach("nuke_player_vaporize_fatman",PATTACH_POINT_FOLLOW,ent,0) 
 				v:Kill()
@@ -103,7 +103,7 @@ function ENT:Explode()
 
 
   	 timer.Simple(2, function()
-	     if !self:IsValid() then return end 
+	     if not self:IsValid() then return end 
 		 local ent = ents.Create("gb5_shockwave_ent")
 		 ent:SetPos( pos ) 
 		 ent:Spawn()
@@ -200,14 +200,14 @@ function ENT:Explode()
 		 if trace.HitWorld then
 			 ParticleEffect(self.Effect,pos,Angle(0,0,0),nil)	
 			 timer.Simple(2, function()
-				 if !self:IsValid() then return end 
+				 if not self:IsValid() then return end 
 				 ParticleEffect("",trace.HitPos,Angle(0,0,0),nil)	
 				 self:Remove()
 		 end)	
 		 else 
 			 ParticleEffect(self.EffectAir,pos,Angle(0,0,0),nil) 
 			 timer.Simple(2, function()
-				 if !self:IsValid() then return end 
+				 if not self:IsValid() then return end 
 				 ParticleEffect("",trace.HitPos,Angle(0,0,0),nil)	
 				 self:Remove()
 			end)	
@@ -223,7 +223,7 @@ function ENT:Explode()
 end
 
 function ENT:SpawnFunction( ply, tr )
-     if ( !tr.Hit ) then return end
+     if ( not tr.Hit ) then return end
 	 self.GBOWNER = ply
      local ent = ents.Create( self.ClassName )
 	 ent:SetPhysicsAttacker(ply)

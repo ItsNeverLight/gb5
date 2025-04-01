@@ -34,8 +34,8 @@ end
 
 function ENT:Think()
 	if (SERVER) then
-	if !self:IsValid() then return end
-	if !self.radowner:Alive() then
+	if not self:IsValid() then return end
+	if not self.radowner:Alive() then
 		self:Remove()
 	end
 	if self.radowner:IsValid() then 

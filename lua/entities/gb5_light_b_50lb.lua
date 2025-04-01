@@ -1,6 +1,6 @@
 AddCSLuaFile()
 
-DEFINE_BASECLASS( "gb5_base_advanced" )
+DEFINE_BASECLASS( "gb5_base_advanbig" )
 
 local ExploSnds = {}
 ExploSnds[1]                         =  "ambient/explosions/explode_1.wav"
@@ -19,10 +19,10 @@ ENT.Contact		                     =  "baldursgate3@gmail.com"
 ENT.Category                         =  "GB5: Light Bombs"
 
 ENT.Model                            =  "models/thedoctor/50lb.mdl"                      
-ENT.Effect                           =  "50lb_main"                  
-ENT.EffectAir                        =  "50lb_air"                   
+ENT.Effect                           =  "100lb_ground"                  
+ENT.EffectAir                        =  "100lb_air"                   
 ENT.EffectWater                      =  "water_medium"
-ENT.ExplosionSound                   =  "gbombs_5/explosions/light_bomb/small_explosion_6.mp3"
+ENT.ExplosionSound                   =  "gbombs_5/explosions/light_bomb/small_explosion_5.mp3"
 ENT.ArmSound                         =  "npc/roller/mine/rmine_blip3.wav"            
 ENT.ActivationSound                  =  "buttons/button14.wav"     
 
@@ -36,28 +36,28 @@ ENT.Timed                            =  false
 
 ENT.ExplosionDamage                  =  99
 ENT.PhysForce                        =  2600
-ENT.ExplosionRadius                  =  150
+ENT.ExplosionRadius                  =  500
 ENT.SpecialRadius                    =  575
 ENT.MaxIgnitionTime                  =  0 
 ENT.Life                             =  20                                  
 ENT.MaxDelay                         =  2                                 
-ENT.TraceLength                      =  100
+ENT.TraceLength                      =  200
 ENT.ImpactSpeed                      =  300
-ENT.Mass                             =  50
+ENT.Mass                             =  100
 ENT.ArmDelay                         =  2   
 ENT.Timer                            =  0
 
 ENT.Shocktime                        = 4
 ENT.GBOWNER                          =  nil             -- don't you fucking touch this.
 
-ENT.DEFAULT_PHYSFORCE                = 75
+ENT.DEFAULT_PHYSFORCE                = 95
 ENT.DEFAULT_PHYSFORCE_PLYAIR         = 25
 ENT.DEFAULT_PHYSFORCE_PLYGROUND      = 25
 
-ENT.Decal                            = "scorch_small"
+ENT.Decal                            = "scorch_medium"
 
 function ENT:SpawnFunction( ply, tr )
-     if ( !tr.Hit ) then return end
+     if ( not tr.Hit ) then return end
      self.GBOWNER = ply
      local ent = ents.Create( self.ClassName )
      ent:SetPhysicsAttacker(ply)

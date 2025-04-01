@@ -47,7 +47,7 @@ function ENT:Initialize()
 end
 function ENT:Think()
      if (SERVER) then
-     if !self:IsValid() then return end
+     if not self:IsValid() then return end
 	 local pos = self:GetPos()
 	 self.CURRENTRANGE = self.CURRENTRANGE+self.SHOCKWAVE_INCREMENT
 	 
@@ -56,7 +56,7 @@ function ENT:Think()
 			 local i = 0
 			 while i < v:GetPhysicsObjectCount() do
 				 phys = v:GetPhysicsObjectNum(i)
-				 if (phys:IsValid() and v!=self) then
+				 if (phys:IsValid() and v~=self) then
 					 local mass = phys:GetMass()
 					 local F_ang = self.PULLPROP
 					 local dist = (pos - v:GetPos()):Length()
@@ -83,7 +83,7 @@ function ENT:Think()
 			 local i = 0
 			 while i < v:GetPhysicsObjectCount() do
 				 phys = v:GetPhysicsObjectNum(i)
-				 if (phys:IsValid() and !v:IsPlayer() and v:GetClass()!=self:GetClass()) then
+				 if (phys:IsValid() and not v:IsPlayer() and v:GetClass()~=self:GetClass()) then
 					v:Remove()
 				 end
 				 if (v:IsPlayer()) or (v:IsNPC()) then

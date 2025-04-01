@@ -147,17 +147,17 @@ function ENT:Initialize()
 	 self.Burnt    = false
 	 self.Ignition = false
 	 self.Arming   = false
-	 if !(WireAddon == nil) then self.Inputs = Wire_CreateInputs(self, { "Arm", "Detonate", "Launch" }) end
+	 if not (WireAddon == nil) then self.Inputs = Wire_CreateInputs(self, { "Arm", "Detonate", "Launch" }) end
 	end
 end
 
 function ENT:TriggerInput(iname, value)
-     if (!self:IsValid()) then return end
+     if (not self:IsValid()) then return end
 	 if (iname == "Detonate") then
          if (value >= 1) then
-		     if (!self.Exploded and self.Armed) then
+		     if (not self.Exploded and self.Armed) then
 			     timer.Simple(math.Rand(0,self.MaxDelay),function()
-				     if !self:IsValid() then return end
+				     if not self:IsValid() then return end
 	                 self.Exploded = true
 					 
 			         self:Explode()
@@ -167,7 +167,7 @@ function ENT:TriggerInput(iname, value)
 	 end
 	 if (iname == "Arm") then
          if (value >= 1) then
-             if (!self.Exploded and !self.Armed and !self.Arming) then
+             if (not self.Exploded and not self.Armed and not self.Arming) then
 			     self:EmitSound(self.ActivationSound)
                  self:Arm()
              end 
@@ -175,7 +175,7 @@ function ENT:TriggerInput(iname, value)
      end		 
 	 if (iname == "Launch") then 
 	     if (value >= 1) then
-		     if (!self.Exploded and !self.Burnt and !self.Ignition and !self.Fired) then
+		     if (not self.Exploded and not self.Burnt and not self.Ignition and not self.Fired) then
 			     self:Launch()
 		     end
 	     end
@@ -289,12 +289,12 @@ function ENT:Explode()
 end
 
 function ENT:OnTakeDamage(dmginfo)
-     if !self:IsValid() then return end
+     if not self:IsValid() then return end
      if self.Exploded then return end
 	 if (self.Life <= 0) then return end
 	 self:TakePhysicsDamage(dmginfo)
      if(GetConVar("gb5_fragility"):GetInt() >= 1) then  
-	     if(!self.Fired and !self.Burnt and !self.Arming and !self.Armed) then
+	     if(not self.Fired and not self.Burnt and not self.Arming and not self.Armed) then
 	         if(math.random(0,9) == 1) then
 		         self:Launch()
 		     else
@@ -302,18 +302,18 @@ function ENT:OnTakeDamage(dmginfo)
 			 end
 	     end
 	 end
-	 if(self.Fired and !self.Burnt and self.Armed) then
+	 if(self.Fired and not self.Burnt and self.Armed) then
 	     if (dmginfo:GetDamage() >= 2) then
 		     local phys = self:GetPhysicsObject()
 		     self:EmitSound(damagesound)
 	         phys:AddAngleVelocity(dmginfo:GetDamageForce()*0.1)
 	     end
 	 end
-	 if(!self.Armed) then return end
+	 if(not self.Armed) then return end
 	 self.Life = self.Life - dmginfo:GetDamage()
      if (self.Life <= 0) then 
 		 timer.Simple(math.Rand(0,self.MaxDelay),function()
-	         if !self:IsValid() then return end 
+	         if not self:IsValid() then return end 
 			 self.Exploded = true
 			 self:Explode()
 			
@@ -323,11 +323,11 @@ end
 
 function ENT:PhysicsCollide( data, physobj )
      if(self.Exploded) then return end
-     if(!self:IsValid()) then return end
+     if(not self:IsValid()) then return end
 	 if(self.Life <= 0) then return end
 	 
 	 if(GetConVar("gb5_fragility"):GetInt() >= 1) then
-	     if(!self.Fired and !self.Burnt and !self.Arming and !self.Armed ) and (data.Speed > self.ImpactSpeed * 5) then --and !self.Arming and !self.Armed
+	     if(not self.Fired and not self.Burnt and not self.Arming and not self.Armed ) and (data.Speed > self.ImpactSpeed * 5) then --and not self.Arming and not self.Armed
 		     if(math.random(0,9) == 1) then
 			     self:Launch()
 		         self:EmitSound(damagesound)
@@ -338,7 +338,7 @@ function ENT:PhysicsCollide( data, physobj )
 	     end
 	 end
 
-	 if(!self.Armed) then return end
+	 if(not self.Armed) then return end
 		
 	 if (data.Speed > self.ImpactSpeed )then
 		 self.Exploded = true
@@ -353,7 +353,7 @@ function ENT:Launch()
 	 if(self.Fired) then return end
 	 
 	 local phys = self:GetPhysicsObject()
-	 if !phys:IsValid() then return end
+	 if not phys:IsValid() then return end
 	 
 	 self.Fired = true
 	 if(self.SmartLaunch) then
@@ -367,7 +367,7 @@ function ENT:Launch()
 	     end
 	 end)
 	 timer.Simple(self.IgnitionDelay,function()
-	     if not self:IsValid() then return end  -- Make a short ignition delay!
+	     if not self:IsValid() then return end  -- Make a short ignition delaynot 
 		 self:SetNetworkedBool("Exploded",true)
 		 self:SetNetworkedInt("LightRed", self.LightRed)
 		 self:SetNetworkedInt("LightBlue", self.LightBlue)
@@ -385,7 +385,7 @@ function ENT:Launch()
 		 self:SetNetworkedBool("EmitLight",true)
 		 self:SetNetworkedBool("self.Ignition",true)
 		 ParticleEffectAttach(self.RocketTrail,PATTACH_ABSORIGIN_FOLLOW,self,1)
-		 if(self.FuelBurnoutTime != 0) then 
+		 if(self.FuelBurnoutTime ~= 0) then 
 	         timer.Simple(self.FuelBurnoutTime,function()
 		         if not self:IsValid() then return end 
 		         self.Burnt = true
@@ -399,9 +399,9 @@ end
 
 function ENT:Think()
      if(self.Burnt) then return end
-     if(!self.Ignition) then return end -- if there wasn't ignition, we won't fly
+     if(not self.Ignition) then return end -- if there wasn't ignition, we won't fly
 	 if(self.Exploded) then return end -- if we exploded then what the fuck are we doing here
-	 if(!self:IsValid()) then return end -- if we aren't good then something fucked up
+	 if(not self:IsValid()) then return end -- if we aren't good then something fucked up
 	 local phys = self:GetPhysicsObject()  
 	 local thrustpos = self:GetPos()
 	 if(self.ForceOrientation == "RIGHT") then
@@ -426,7 +426,7 @@ function ENT:Think()
 end
 
 function ENT:Arm()
-     if(!self:IsValid()) then return end
+     if(not self:IsValid()) then return end
 	 if(self.Armed) then return end
 	 self.Arming = true
 	 
@@ -437,7 +437,7 @@ function ENT:Arm()
 		 self:EmitSound(self.ArmSound)
 		 if(self.Timed) then
 	         timer.Simple(self.Timer, function()
-	             if !self:IsValid() then return end 
+	             if not self:IsValid() then return end 
 			     self.Exploded = true
 			     self:Explode()
 				 self.EmitLight = true
@@ -451,7 +451,7 @@ function ENT:Use( activator, caller )
 	 if(self.Dumb) then return end
 	 if(GetConVar("gb5_easyuse"):GetInt() >= 1) then
          if(self:IsValid()) then
-             if (!self.Exploded) and (!self.Burnt) and (!self.Fired) then
+             if (not self.Exploded) and (not self.Burnt) and (not self.Fired) then
 	             if (activator:IsPlayer()) then
                      self:EmitSound(self.ActivationSound)
                      self:Launch()
@@ -469,7 +469,7 @@ end
 if ( CLIENT ) then
      function ENT:Draw()
          self:DrawModel()
-		 if !(WireAddon == nil) then Wire_Render(self.Entity) end
+		 if not (WireAddon == nil) then Wire_Render(self.Entity) end
      end
 end
 

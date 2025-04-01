@@ -31,16 +31,16 @@ end
 function ENT:Think()
 	
 	if (SERVER) then
-	if !self:IsValid() then return end
+	if not self:IsValid() then return end
 	local pos = self:GetPos()
 	for k, v in pairs(ents.FindInSphere(pos,self.RadRadius)) do
-		if v:IsPlayer() and !v:IsNPC() and v.hazsuited==false then
+		if v:IsPlayer() and not v:IsNPC() and v.hazsuited==false then
 			local dist = (self:GetPos() - v:GetPos()):Length()
 			local relation = math.Clamp((self.RadRadius - dist) / self.RadRadius, 0, 1)
 			local dmg = DamageInfo()
 			dmg:SetDamage(10*relation)
 			dmg:SetDamageType(DMG_RADIATION)
-			if self.GBOWNER==nil or !self.GBOWNER:IsValid() then
+			if self.GBOWNER==nil or not self.GBOWNER:IsValid() then
 				self.GBOWNER=table.Random(player.GetAll())
 			end
 			dmg:SetAttacker(self.GBOWNER)

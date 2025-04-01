@@ -30,7 +30,7 @@ function ENT:Initialize()
 end
 function ENT:Think()
      if (SERVER) then
-     if !self:IsValid() then return end
+     if not self:IsValid() then return end
 	 local pos = self:GetPos()
 	 self.CURRENTRANGE = self.CURRENTRANGE+self.SHOCKWAVE_INCREMENT
 	 for k, v in pairs(ents.FindInSphere(pos,self.CURRENTRANGE)) do
@@ -65,7 +65,7 @@ function ENT:Think()
 			 local i = 0
 			 while i < v:GetPhysicsObjectCount() do
 				 phys = v:GetPhysicsObjectNum(i)
-				 if (phys:IsValid() and !v:IsPlayer()) then
+				 if (phys:IsValid() and not v:IsPlayer()) then
 					v:Remove()
 				 end
 				 if (v:IsPlayer()) or (v:IsNPC()) then

@@ -60,19 +60,19 @@ function ENT:Initialize()
 	 self.Used     = false
 	 self.Arming = false
 	 self.Exploding = false
-	  if !(WireAddon == nil) then self.Inputs   = Wire_CreateInputs(self, { "Arm", "Detonate" }) end
+	  if not (WireAddon == nil) then self.Inputs   = Wire_CreateInputs(self, { "Arm", "Detonate" }) end
 	end
 end
 
 function ENT:Explode()
-     if !self.Exploded then return end
+     if not self.Exploded then return end
 	 if self.Exploding then return end
 	
 	 local pos_sound = self:LocalToWorld(self:OBBCenter())
 	 constraint.RemoveAll(self)
 	 local physo = self:GetPhysicsObject()
 	 physo:Wake()	
-	 if !self:IsValid() then return end 
+	 if not self:IsValid() then return end 
 	 self.Exploding = true
 	 local pos = self:GetPos()
 	 for k, v in pairs(ents.FindInSphere(pos,45)) do
@@ -89,16 +89,16 @@ function ENT:Explode()
 				phys:EnableMotion(true)
 
 				phys:AddVelocity(F_dir)
-				if !v:IsValid() then return end
+				if not v:IsValid() then return end
 				timer.Simple(0.2, function()
 					phys:AddVelocity(F_dir)		
-					if !v:IsValid() then return end
+					if not v:IsValid() then return end
 					timer.Simple(0.2, function()
 						phys:AddVelocity(F_dir)			
-						if !v:IsValid() then return end
+						if not v:IsValid() then return end
 						timer.Simple(0.2, function()				
 							phys:AddVelocity(F_dir)			
-							if !v:IsValid() then return end
+							if not v:IsValid() then return end
 							timer.Simple(0.2, function()				
 								phys:AddVelocity(F_dir)							
 							end)
@@ -166,7 +166,7 @@ function ENT:Explode()
 end
 
 function ENT:SpawnFunction( ply, tr )
-     if ( !tr.Hit ) then return end
+     if ( not tr.Hit ) then return end
 	 self.GBOWNER = ply
      local ent = ents.Create( self.ClassName )
 	 ent:SetPhysicsAttacker(ply)

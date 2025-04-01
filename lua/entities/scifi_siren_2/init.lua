@@ -14,22 +14,22 @@ sound.Add( {
 function ENT:TriggerInput(iname, value)
 	 if (iname == "On") then
 		if value == 1 then
-		if self.Activated == 0 && self.Useable == 1 then
-		timer.Simple(0.42, function() if !self:IsValid() then return end
+		if self.Activated == 0 and self.Useable == 1 then
+		timer.Simple(0.42, function() if not self:IsValid() then return end
 		self:Havok() end)
 		self.Entity:EmitSound( "buttons/lever4.wav", 62, 100 )
-		timer.Simple(0.32, function() if !self:IsValid() then return end
+		timer.Simple(0.32, function() if not self:IsValid() then return end
 		self:EnableUse() end)
 		self.Activated = 1
 		self.Useable = 0
 		return end
 		end
 		if value == 0 then
-		if self.Activated == 1 && self.Useable == 1 then
-		timer.Simple(0.42, function() if !self:IsValid() then return end
+		if self.Activated == 1 and self.Useable == 1 then
+		timer.Simple(0.42, function() if not self:IsValid() then return end
 		self:EndHavok() end)
 		self.Entity:EmitSound( "buttons/lever5.wav", 72, 100 )
-		timer.Simple(0.32, function() if !self:IsValid() then return end
+		timer.Simple(0.32, function() if not self:IsValid() then return end
 		self:EnableUse() end)
 		self.Activated = 0
 		self.Useable = 0
@@ -57,13 +57,13 @@ function ENT:Initialize()
 
 	self.Useable = 1
 	self.Activated = 0
-	if !(WireAddon == nil) then self.Inputs   = Wire_CreateInputs(self, { "On" }) end
+	if not (WireAddon == nil) then self.Inputs   = Wire_CreateInputs(self, { "On" }) end
 
 end
 
 function ENT:SpawnFunction( ply, tr )
 
-if ( !tr.Hit ) then return end
+if ( not tr.Hit ) then return end
 
 local SpawnPos = tr.HitPos + tr.HitNormal * 16
 local ent = ents.Create( "scifi_siren_2" )
@@ -80,21 +80,21 @@ end
 
 function ENT:Use( activator, caller )
 
-if self.Activated == 0 && self.Useable == 1 then
-timer.Simple(0.42, function() if !self:IsValid() then return end
+if self.Activated == 0 and self.Useable == 1 then
+timer.Simple(0.42, function() if not self:IsValid() then return end
 self:Havok() end)
 self.Entity:EmitSound( "buttons/lever4.wav", 62, 100 )
-timer.Simple(0.32, function() if !self:IsValid() then return end
+timer.Simple(0.32, function() if not self:IsValid() then return end
 self:EnableUse() end)
 self.Activated = 1
 self.Useable = 0
 return end
 
-if self.Activated == 1 && self.Useable == 1 then
-timer.Simple(0.42, function() if !self:IsValid() then return end
+if self.Activated == 1 and self.Useable == 1 then
+timer.Simple(0.42, function() if not self:IsValid() then return end
 self:EndHavok() end)
 self.Entity:EmitSound( "buttons/lever5.wav", 72, 100 )
-timer.Simple(0.32, function() if !self:IsValid() then return end
+timer.Simple(0.32, function() if not self:IsValid() then return end
 self:EnableUse() end)
 self.Activated = 0
 self.Useable = 0

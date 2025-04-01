@@ -53,7 +53,7 @@ ENT.Shocktime                        =  1
 
 ENT.DEFAULT_PHYSFORCE                = 500
 ENT.DEFAULT_PHYSFORCE_PLYAIR         = 100
-ENT.DEFAULT_PHYSFORCE_PLYGROUND      = 5000 
+ENT.DEFAULT_PHYSFORCE_PLYGROUND         = 5000 
 ENT.GBOWNER                          =  nil            
 
 function ENT:Initialize()
@@ -76,17 +76,17 @@ function ENT:Initialize()
 	 self.Exploded = false
 	 self.Used     = false
 	 self.Arming   = false
-	  if !(WireAddon == nil) then self.Inputs   = Wire_CreateInputs(self, { "Arm", "Detonate" }) end
+	  if not (WireAddon == nil) then self.Inputs   = Wire_CreateInputs(self, { "Arm", "Detonate" }) end
 	end
 end
 
 function ENT:TriggerInput(iname, value)
-     if (!self:IsValid()) then return end
+     if (not self:IsValid()) then return end
 	 if (iname == "Detonate") then
          if (value >= 1) then
-		     if (!self.Exploded and self.Armed) then
+		     if (not self.Exploded and self.Armed) then
 			     timer.Simple(math.Rand(0,self.MaxDelay),function()
-				     if !self:IsValid() then return end
+				     if not self:IsValid() then return end
 	                 self.Exploded = true
 			         self:Explode()
 				 end)
@@ -95,7 +95,7 @@ function ENT:TriggerInput(iname, value)
 	 end
 	 if (iname == "Arm") then
          if (value >= 1) then
-             if (!self.Exploded and !self.Armed and !self.Arming) then
+             if (not self.Exploded and not self.Armed and not self.Arming) then
 			     self:EmitSound(self.ActivationSound)
                  self:Arm()
              end 
@@ -114,45 +114,74 @@ end
 
 
 function ENT:Explode()
-	if !self.Exploded then return end
-	local pos = self:LocalToWorld(self:OBBCenter())
+    if not self.Exploded then return end
+    if self.Exploding then return end
+    
+    local pos = self:LocalToWorld(self:OBBCenter())
+    self:SetModel("models/gibs/scanner_gib02.mdl")
+    self.Exploding = true
+    constraint.RemoveAll(self)
+    local physo = self:GetPhysicsObject()
+    physo:Wake()
+    physo:EnableMotion(false)
+    local ent = ents.Create("gb5_shockwave_sound_lowsh")
+    ent:SetPos(pos)
+    ent:Spawn()
+    ent:Activate()
+    ent:SetVar("GBOWNER", self.GBOWNER)
+    ent:SetVar("MAX_RANGE", 500000)
+    ent:SetVar("SHOCKWAVE_INCREMENT", 20000)
+    ent:SetVar("DELAY", 0.01)
+    ent:SetVar("Shocktime", 5)
+    ent:SetVar("SOUND", "gbombs_5/explosions/special/endothermic_bomb.mp3")
+    self.affected = {}
+    for k, v in pairs(ents.FindInSphere(pos, 1800)) do
+        if v:IsPlayer() then
+            table.insert(self.affected, v)
+        end
+    end
+	
+	   local targets = ents.FindInSphere(self:GetPos(), self.ExplosionRadius)
+    for _, target in ipairs(targets) do
+        if target:IsValid() and target:IsPlayer() then
+            local damageInfo = DamageInfo()
+            damageInfo:SetDamage(self.ExplosionDamage)
+            damageInfo:SetAttacker(self.GBOWNER)
+            damageInfo:SetInflictor(self)
+            damageInfo:SetDamageType(DMG_BLAST)
+            target:TakeDamageInfo(damageInfo)
+        end
+    end
 
-	local ent = ents.Create("gb5_shockwave_ent")
-	ent:SetPos( pos ) 
-	ent:Spawn()
-	ent:Activate()
-	ent:SetVar("DEFAULT_PHYSFORCE", self.DEFAULT_PHYSFORCE)
-	ent:SetVar("DEFAULT_PHYSFORCE_PLYAIR", self.DEFAULT_PHYSFORCE_PLYAIR)
-	ent:SetVar("DEFAULT_PHYSFORCE_PLYGROUND", self.DEFAULT_PHYSFORCE_PLYGROUND)
-	ent:SetVar("GBOWNER", self.GBOWNER)
-	ent:SetVar("MAX_RANGE",self.ExplosionRadius)
-	ent:SetVar("SHOCKWAVE_INCREMENT",100)
-	ent:SetVar("DELAY",0.01)
-	ent.trace=self.TraceLength
-	ent.decal=self.Decal
+    timer.Simple(2.5, function()
+        if not self:IsValid() then return end
+        local ent = ents.Create("gb5_shockwave_sound_lowsh")
+        ent:SetPos(pos)
+        ent:Spawn()
+        ent:Activate()
+        ent:SetVar("GBOWNER", self.GBOWNER)
+        ent:SetVar("MAX_RANGE", 1500)
+        ent:SetVar("SHOCKWAVE_INCREMENT", 100)
+        ent:SetVar("DELAY", 0.01)
+        ent:SetVar("Shocktime", 1)
+        ent:SetVar("SOUND", "gbombs_5/explosions/special/endothermic_freeze.wav")
 
-	local ent = ents.Create("gb5_shockwave_sound_lowsh")
-	ent:SetPos( pos ) 
-	ent:Spawn()
-	ent:Activate()
-	ent:SetVar("GBOWNER", self.GBOWNER)
-	ent:SetVar("MAX_RANGE",50000)
-	if GetConVar("gb5_sound_speed"):GetInt() == 0 then
-		ent:SetVar("SHOCKWAVE_INCREMENT",200)
-	elseif GetConVar("gb5_sound_speed"):GetInt()== 1 then
-		ent:SetVar("SHOCKWAVE_INCREMENT",300)
-	elseif GetConVar("gb5_sound_speed"):GetInt() == 2 then
-		ent:SetVar("SHOCKWAVE_INCREMENT",400)
-	elseif GetConVar("gb5_sound_speed"):GetInt() == -1 then
-		ent:SetVar("SHOCKWAVE_INCREMENT",100)
-	elseif GetConVar("gb5_sound_speed"):GetInt() == -2 then
-		ent:SetVar("SHOCKWAVE_INCREMENT",50)
-	else
-		ent:SetVar("SHOCKWAVE_INCREMENT",200)
-	end
-	ent:SetVar("DELAY",0.01)
-	ent:SetVar("SOUND", self.ExplosionSound)
-	ent:SetVar("Shocktime", self.Shocktime)
+        local ent = ents.Create("gb5_shockwave_cold")
+        ent:SetPos(pos)
+        ent:Spawn()
+        ent:Activate()
+        ent:SetVar("DEFAULT_PHYSFORCE", 25)
+        ent:SetVar("DEFAULT_PHYSFORCE_PLYAIR", 25)
+        ent:SetVar("DEFAULT_PHYSFORCE_PLYGROUND", 25)
+        ent:SetVar("GBOWNER", self.GBOWNER)
+        ent:SetVar("MAX_RANGE", 1500)
+        ent:SetVar("SHOCKWAVE_INCREMENT", 100)
+        ent:SetVar("DELAY", 0.1)
+        timer.Simple(10, function()
+            if not self:IsValid() then return end
+            self:Remove()
+        end)
+    end)
 	
 	 if(self:WaterLevel() >= 1) then
 		 local trdata   = {}
@@ -206,21 +235,21 @@ function ENT:OnTakeDamage(dmginfo)
 	 
      if (self.Life <= 0) then return end
 	 if(GetConVar("gb5_fragility"):GetInt() >= 1) then
-	     if(!self.Armed and !self.Arming) then
+	     if(not self.Armed and not self.Arming) then
 	         self:Arm()
 	     end
 	 end
 	 
-     if(!self.Armed) then return end
+     if(not self.Armed) then return end
 
 	 if self:IsValid() then
 	     self.Life = self.Life - dmginfo:GetDamage()
-		 if (self.Life <= self.Life/2) and !self.Exploded and self.Flamable then
+		 if (self.Life <= self.Life/2) and not self.Exploded and self.Flamable then
 		     self:Ignite(self.MaxDelay,0)
 		 end
 		 if (self.Life <= 0) then 
 		     timer.Simple(math.Rand(0,self.MaxDelay),function()
-			     if !self:IsValid() then return end 
+			     if not self:IsValid() then return end 
 			     self.Exploded = true
 			     self:Explode()
 			 end)
@@ -230,17 +259,17 @@ end
 
 function ENT:PhysicsCollide( data, physobj )
      if(self.Exploded) then return end
-     if(!self:IsValid()) then return end
+     if(not self:IsValid()) then return end
 	 if(self.Life <= 0) then return end
 	 if(GetConVar("gb5_fragility"):GetInt() >= 1) then
 	     if(data.Speed > self.ImpactSpeed) then
-	 	     if(!self.Armed and !self.Arming) then
+	 	     if(not self.Armed and not self.Arming) then
 		         self:EmitSound(damagesound)
 	             self:Arm()
 	         end
 		 end
 	 end
-	 if(!self.Armed) then return end
+	 if(not self.Armed) then return end
      if self.ShouldExplodeOnImpact then
 	     if (data.Speed > self.ImpactSpeed ) then
 			 self.Exploded = true
@@ -250,21 +279,21 @@ function ENT:PhysicsCollide( data, physobj )
 end
 
 function ENT:Arm()
-     if(!self:IsValid()) then return end
+     if(not self:IsValid()) then return end
 	 if(self.Exploded) then return end
 	 if(self.Armed) then return end
 	 self.Arming = true
 	 self.Used = true
 	 timer.Simple(self.ArmDelay, function()
-	     if !self:IsValid() then return end 
+	     if not self:IsValid() then return end 
 	     self.Armed = true
 		 self.Arming = false
 		 self:EmitSound(self.ArmSound)
 		 if(self.Timed) then
 	         timer.Simple(self.Timer, function()
-	             if !self:IsValid() then return end 
+	             if not self:IsValid() then return end 
 				 timer.Simple(math.Rand(0,self.MaxDelay),function()
-			         if !self:IsValid() then return end 
+			         if not self:IsValid() then return end 
 			         self.Exploded = true
 			         self:Explode()
 				 end)
@@ -277,8 +306,8 @@ function ENT:Use( activator, caller )
      if(self.Exploded) then return end
      if(self:IsValid()) then
 	     if(GetConVar("gb5_easyuse"):GetInt() >= 1) then
-	         if(!self.Armed) then
-		         if(!self.Exploded) and (!self.Used) then
+	         if(not self.Armed) then
+		         if(not self.Exploded) and (not self.Used) then
 		             if(activator:IsPlayer()) then
                          self:EmitSound(self.ActivationSound)
                          self:Arm()
@@ -297,7 +326,7 @@ end
 if ( CLIENT ) then
      function ENT:Draw()
          self:DrawModel()
-		 if !(WireAddon == nil) then Wire_Render(self.Entity) end
+		 if not (WireAddon == nil) then Wire_Render(self.Entity) end
      end
 end
 

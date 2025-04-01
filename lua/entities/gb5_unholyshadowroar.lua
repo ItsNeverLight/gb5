@@ -45,7 +45,7 @@ function ENT:SpawnMulti()
 end
 function ENT:Think()
 	if (SERVER) then
-	if !self:IsValid() then return end
+	if not self:IsValid() then return end
 	self.spawns = self.spawns+2
 	local ent = ents.Create("gb5_shockwave_roar")
 	local pos = self:GetPos()
@@ -65,7 +65,7 @@ function ENT:Think()
 	local traceRes=pl:GetEyeTrace()
 	self:SetPos( pl:GetPos() ) 
 	self:SetAngles(pl:EyeAngles())
-	if traceRes.HitWorld && self.spawns > 60 then
+	if traceRes.HitWorld and self.spawns > 60 then
 		if (traceRes.HitPos:Distance(self:GetPos()) <= 5600) then
 			ParticleEffect("unholyshadowdragon_roar_tracer_hit",traceRes.HitPos,Angle(0,0,0),nil)		
 			local ent = ents.Create("gb5_shockwave_ent")

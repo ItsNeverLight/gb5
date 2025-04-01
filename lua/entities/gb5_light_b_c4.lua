@@ -73,12 +73,12 @@ function ENT:Initialize()
 	 self.Arming = false
 	 self.Exploding = false
 	 self.AllowDetonate = true
-	  if !(WireAddon == nil) then self.Inputs   = Wire_CreateInputs(self, { "Arm", "Detonate" }) end
+	  if not (WireAddon == nil) then self.Inputs   = Wire_CreateInputs(self, { "Arm", "Detonate" }) end
 	end
 end
 
 function ENT:Explode()
-	if !self.Exploded then return end
+	if not self.Exploded then return end
 	if self.Exploding then return end
 
 	local pos = self:LocalToWorld(self:OBBCenter())
@@ -89,7 +89,7 @@ function ENT:Explode()
 	physo:Wake()	
 
 	self.Exploding = true
-	if !self:IsValid() then return end 
+	if not self:IsValid() then return end 
 	self:StopParticles()
 	local pos = self:LocalToWorld(self:OBBCenter())
 
@@ -175,7 +175,7 @@ net.Receive("c4_datastream",function()
 	entity.AllowDetonate=false
 	
 	timer.Simple(c4_timer, function()
-		if !entity:IsValid() then return end
+		if not entity:IsValid() then return end
 		entity.Exploded=true
 		
 		entity:Explode()
@@ -210,7 +210,7 @@ net.Receive("c4_diagbox",function()
 	DButton:SetImage("icon16/cross.png")
 	DButton:SetSize( 60, 60 )
 	DButton.DoClick = function()
-		if (!(not tonumber(c4_t:GetValue())))then 
+		if (not (not tonumber(c4_t:GetValue())))then 
 			if tonumber(c4_t:GetValue())>=1 and tonumber(c4_t:GetValue())<=60 then
 				surface.PlaySound("items/suitchargeok1.wav")
 				net.Start("c4_datastream")
@@ -230,7 +230,7 @@ net.Receive("c4_diagbox",function()
 	end
 
 	c4_t.OnTextChanged=function()
-		if (!(not tonumber(c4_t:GetValue())))then 
+		if (not (not tonumber(c4_t:GetValue())))then 
 			if tonumber(c4_t:GetValue())>=1 and tonumber(c4_t:GetValue())<=60 then
 				DButton:SetImage("icon16/tick.png")
 			else
@@ -247,7 +247,7 @@ net.Receive("c4_diagbox",function()
 end)
 
 function ENT:Use(activator,caller)
-	if(!activator:IsPlayer())then return end
+	if(not activator:IsPlayer())then return end
 	if activator:KeyDown(IN_WALK) and self.AllowDetonate==true then
 		net.Start("c4_diagbox")
 		net.WriteEntity(self)
@@ -257,7 +257,7 @@ function ENT:Use(activator,caller)
 end
 
 function ENT:SpawnFunction( ply, tr )
-     if ( !tr.Hit ) then return end
+     if ( not tr.Hit ) then return end
 	 self.GBOWNER = ply
      local ent = ents.Create( self.ClassName )
 	 ent:SetPhysicsAttacker(ply)
@@ -270,10 +270,10 @@ end
 
 function ENT:Think()
 	if SERVER then
-		if !self:IsValid() then return end
+		if not self:IsValid() then return end
 		for k, v in pairs(ents.FindInSphere(self:GetPos(),5)) do
 			local phys = v:GetPhysicsObject()
-			if v:GetClass() == "prop_door_rotating" or v:GetClass() == "func_door" or phys:IsValid() then
+			if v:GetClass() == "prop_door_rotating" or v:GetClass() == "func_door" or v:GetClass() == "func_door_rotating" or phys:IsValid() then
 				constraint.Weld( self, v, 0, 0, 5000, true, false )
 			end
 		end

@@ -49,11 +49,11 @@ end
 
 function ENT:Think()	
 	if (SERVER) then
-	if !self:IsValid() then return end
-	if !self.infected:IsValid() then -- doesnt fucking work
+	if not self:IsValid() then return end
+	if not self.infected:IsValid() then -- doesnt fucking work
 		self:Remove()
 	end
-	if !self.infected:IsValid() then return end
+	if not self.infected:IsValid() then return end
 	self.R = self.R-0.15
 	self.G = self.G-0.2
 	self.B = self.B-0.2
@@ -62,7 +62,7 @@ function ENT:Think()
 	self:SetPos(Vector(pos[1],pos[2],pos[3]))
 	self.Bursts = self.Bursts + 1
 	for k, v in pairs(ents.FindInSphere(self:GetPos(),100)) do
-		if v:IsPlayer() && v:Alive() && !v.isinfected then
+		if v:IsPlayer() and v:Alive() and not v.isinfected then
 			if v.gasmasked==false and v.hazsuited==false then
 				local ent = ents.Create("gb5_chemical_tvirus_entity")
 				ent:SetVar("infected", v)
@@ -73,7 +73,7 @@ function ENT:Think()
 				ParticleEffectAttach("zombie_blood",PATTACH_ABSORIGIN_FOLLOW,v, 1) 
 			end
 		end
-		if (v:IsNPC() && table.HasValue(npc_tvirus,v:GetClass()) && !v.isinfected) or (v.IsVJHuman==true && !v.isinfected) then
+		if (v:IsNPC() and table.HasValue(npc_tvirus,v:GetClass()) and not v.isinfected) or (v.IsVJHuman==true and not v.isinfected) then
 			if v.gasmasked==false or v.hazsuited==false then return end
 			local ent = ents.Create("gb5_chemical_tvirus_entity_npc")
 			ent:SetVar("infected", v)
@@ -84,14 +84,14 @@ function ENT:Think()
 			ParticleEffectAttach("zombie_blood",PATTACH_ABSORIGIN_FOLLOW,v, 1) 
 		end	
 	end
-	if (self.Bursts >= 1140) && (self.playsound==1) then 
-		if !self:IsValid() then return end
+	if (self.Bursts >= 1140) and (self.playsound==1) then 
+		if not self:IsValid() then return end
 		self.playsound=0
 		self.infected:EmitSound("gbombs_5/tvirus_infection/ply_infection_final.mp3")
 	end
 	if (self.Bursts >= 1200) then -- Zombie time hehe
-		if !self:IsValid() then return end
-		if (file.Exists( "lua/autorun/vj_nmrih_autorun.lua", "GAME" )) && GetConVar("gb5_nmrih_zombies"):GetInt()== 1 then
+		if not self:IsValid() then return end
+		if (file.Exists( "lua/autorun/vj_nmrih_autorun.lua", "GAME" )) and GetConVar("gb5_nmrih_zombies"):GetInt()== 1 then
 			local ent = ents.Create(table.Random(ZombieList2)) -- This creates our zombie entity
 			ent:SetPos(self.infected:GetPos())
 			ent:Spawn() 
@@ -152,8 +152,8 @@ end
 
 if (SERVER) then
 	function ENT:OnRemove()
-		if !self.diedfromtime then
-			if (file.Exists( "lua/autorun/vj_nmrih_autorun.lua", "GAME" )) && GetConVar("gb5_nmrih_zombies"):GetInt()== 1 then
+		if not self.diedfromtime then
+			if (file.Exists( "lua/autorun/vj_nmrih_autorun.lua", "GAME" )) and GetConVar("gb5_nmrih_zombies"):GetInt()== 1 then
 			local ent = ents.Create(table.Random(ZombieList2)) -- This creates our zombie entity
 			ent:SetPos(self:GetPos())
 			ent:Spawn() 
@@ -179,7 +179,7 @@ if (SERVER) then
 			self.infected:SetNWBool("Clear_HUD", true)
 			self:Remove()
 		else
-			if math.random(1,25)!=25 then
+			if math.random(1,25)~=25 then
 				local ent = ents.Create(table.Random(ZombieList)) -- This creates our zombie entity
 				ent:SetPos(self:GetPos())
 				ent:Spawn() 
@@ -206,7 +206,7 @@ if (SERVER) then
 				self:Remove()
 			else
 				for k, v in pairs(player.GetAll()) do
-					v:ChatPrint("Rare zombie boss has spawned somewhere!")
+					v:ChatPrint("Rare zombie boss has spawned somewherenot ")
 				end
 				local ent = ents.Create(table.Random(ZombieList)) -- This creates our zombie entity
 				ent:SetPos(self:GetPos())
@@ -221,7 +221,7 @@ if (SERVER) then
 			end
 			end
 		end
-		if !self.infected:IsValid() then return end
+		if not self.infected:IsValid() then return end
 		local infected_player = self.infected
 		infected_player:StopParticles()
 	end

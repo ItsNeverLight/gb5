@@ -48,6 +48,7 @@ function ENT:Think(ply)
 					v:Fire("Break", 0)
 				 end
 				 if phys:IsValid() and not (v:GetClass()=="gb5_fireroar") and not (v:IsPlayer()) and not (v:IsNPC()) then
+					 local mass = phys:GetMass()
 					 local F_ang = self.DEFAULT_PHYSFORCE
 					 local dist = (pos - v:GetPos()):Length()
 					 local relation = math.Clamp((self.CURRENTRANGE - dist) / self.CURRENTRANGE, 0, 1)
@@ -65,6 +66,7 @@ function ENT:Think(ply)
 					 dmg:SetDamageType(DMG_BLAST)
 					 dmg:SetAttacker(self.GBOWNER)
 					 v:TakeDamageInfo(dmg)
+					 local mass = phys:GetMass()
 					 local F_ang = self.DEFAULT_PHYSFORCE_PLYGROUND
 					 local dist = (pos - v:GetPos()):Length()
 					 local relation = math.Clamp((self.CURRENTRANGE - dist) / self.CURRENTRANGE, 0, 1)

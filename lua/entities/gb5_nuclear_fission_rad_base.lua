@@ -27,7 +27,7 @@ function ENT:Initialize()
 end
 function ENT:Think()
      if (SERVER) then
-     if !self:IsValid() then return end
+     if not self:IsValid() then return end
 	 local pos = self:GetPos()
 	 local dmg = DamageInfo()
 	 dmg:SetDamage(self.DamageAmount)

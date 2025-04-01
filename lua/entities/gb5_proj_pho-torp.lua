@@ -72,7 +72,7 @@ ENT.Shocktime                        = 2
 ENT.GBOWNER                          =  nil             -- don't you fucking touch this.
 
 function ENT:SpawnFunction( ply, tr )
-     if ( !tr.Hit ) then return end
+     if ( not tr.Hit ) then return end
 	 self.GBOWNER = ply
      local ent = ents.Create( self.ClassName )
 	 ent:SetPhysicsAttacker(ply)
@@ -89,7 +89,7 @@ function ENT:Launch()
 	 if(self.Fired) then return end
 	 
 	 local phys = self:GetPhysicsObject()
-	 if !phys:IsValid() then return end
+	 if not phys:IsValid() then return end
 	 
 	 self.Fired = true
 	 if(self.SmartLaunch) then
@@ -103,7 +103,7 @@ function ENT:Launch()
 	     end
 	 end)
 	 timer.Simple(self.IgnitionDelay,function()
-	     if not self:IsValid() then return end  -- Make a short ignition delay!
+	     if not self:IsValid() then return end  -- Make a short ignition delaynot 
 		 local phys = self:GetPhysicsObject()
 		 self.Ignition = true
 		 self:Arm()
@@ -116,7 +116,7 @@ function ENT:Launch()
 		 self:SetNetworkedBool("EmitLight",true)
 		 self:SetNetworkedBool("self.Ignition",true)
 		 ParticleEffectAttach(self.RocketTrail,PATTACH_ABSORIGIN_FOLLOW,self,1)
-		 if(self.FuelBurnoutTime != 0) then 
+		 if(self.FuelBurnoutTime ~= 0) then 
 	         timer.Simple(self.FuelBurnoutTime,function()
 		         if not self:IsValid() then return end 
 		         self.Burnt = true
@@ -199,7 +199,7 @@ function ENT:Explode()
 		 nbc:Activate()
 	 end
 	 timer.Simple(0.2, function() 
-	 if !self:IsValid() then return end
+	 if not self:IsValid() then return end
 		self:Remove()
 	 end)
 end

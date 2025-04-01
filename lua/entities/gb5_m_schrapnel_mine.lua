@@ -44,7 +44,7 @@ ENT.PushWeight                       =  5    --If something heavier or equal tou
 ENT.GBOWNER                          =  nil             -- don't you fucking touch this.
 
 function ENT:Arm()
-     if(!self:IsValid()) then return end
+     if(not self:IsValid()) then return end
 	 if(self.Exploded) then return end
 	 if(self.Armed) then return end
 	 self.Arming = true
@@ -56,15 +56,15 @@ function ENT:Arm()
  
 	 
 	 timer.Simple(self.ArmDelay, function()
-	     if !self:IsValid() then return end 
+	     if not self:IsValid() then return end 
 	     self.Armed = true
 		 self.Arming = false
 		 self:EmitSound(self.ArmSound)
 		 if(self.Timed) then
 	         timer.Simple(self.Timer, function()
-	             if !self:IsValid() then return end 
+	             if not self:IsValid() then return end 
 				 timer.Simple(math.Rand(0,self.MaxDelay),function()
-			         if !self:IsValid() then return end 
+			         if not self:IsValid() then return end 
 			         self.Exploded = true
 			         self:Explode()
 				 end)
@@ -78,17 +78,17 @@ end
 
 function ENT:PhysicsCollide( data, physobj )
      if(self.Exploded) then return end
-     if(!self:IsValid()) then return end
+     if(not self:IsValid()) then return end
 	 if(self.Life <= 0) then return end
 	 if(GetConVar("gb5_fragility"):GetInt() >= 1) then
 	     if(data.Speed > self.ImpactSpeed) then
-	 	     if(!self.Armed and !self.Arming) then
+	 	     if(not self.Armed and not self.Arming) then
 		         self:EmitSound(damagesound)
 	             self:Arm()
 	         end
 		 end
 	 end
-	 if(!self.Armed) then return end
+	 if(not self.Armed) then return end
      if self.ShouldExplodeOnImpact then
 	     local pusher = data.HitEntity
 		 if (pusher:IsWorld() == true) then return end
@@ -102,7 +102,7 @@ function ENT:PhysicsCollide( data, physobj )
 end
 
 function ENT:Explode()
-     if !self.Exploded then return end
+     if not self.Exploded then return end
 	 if self.Exploding then return end
 	
 	 local pos = self:LocalToWorld(self:OBBCenter())
@@ -111,7 +111,7 @@ function ENT:Explode()
 	 local physo = self:GetPhysicsObject()
 	 physo:Wake()	
 	 self.Exploding = true
-	 if !self:IsValid() then return end 
+	 if not self:IsValid() then return end 
 	 self:StopParticles()
 	 local pos = self:LocalToWorld(self:OBBCenter())
 	 
@@ -205,13 +205,13 @@ function ENT:Explode()
 		 if trace.HitWorld then
 			 ParticleEffect(self.Effect,pos,Angle(0,0,0),nil)	
 			 timer.Simple(0.1, function()
-				 if !self:IsValid() then return end 
+				 if not self:IsValid() then return end 
 				 self:Remove()
 				 
 			 end)
 		 else 
 			 ParticleEffect(self.EffectAir,self:GetPos(),Angle(0,0,0),nil) 
-			 if !self:IsValid() then return end 
+			 if not self:IsValid() then return end 
 				self:Remove()
 		 end
 	 end
@@ -219,7 +219,7 @@ end
 
 
 function ENT:SpawnFunction( ply, tr )
-     if ( !tr.Hit ) then return end
+     if ( not tr.Hit ) then return end
 	 self.GBOWNER = ply
      local ent = ents.Create( self.ClassName )
 	 ent:SetPhysicsAttacker(ply)

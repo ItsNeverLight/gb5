@@ -55,7 +55,7 @@ function ENT:Initialize()
 	 local pos = self:GetPos()
 	 for k, v in pairs(ents.FindInSphere(pos,30000)) do
 		 if v:IsValid() then
-			 if(v.isWacAircraft) && (v.active==true) then
+			 if(v.isWacAircraft) and (v.active==true) then
 				v:setEngine(false)
 				v.engineDead = true							 
 				ParticleEffectAttach("emp_electrify_model",PATTACH_POINT_FOLLOW,v,0) 
@@ -93,7 +93,7 @@ function ENT:Initialize()
 							ent:EmitSound(sound)
 						 end)
 						 timer.Simple(math.random(4,5)+math.random(), function()
-							if !ent:IsValid() then return end
+							if not ent:IsValid() then return end
 							ent:Remove()
 						 end)
 					 end		
@@ -116,7 +116,7 @@ function ENT:Initialize()
 							ent:EmitSound(sound)
 						 end)
 						 timer.Simple(math.random(4,5)+math.random(), function()
-							if !ent:IsValid() then return end
+							if not ent:IsValid() then return end
 							ent:Remove()
 						 end)
 					 end		
@@ -143,7 +143,7 @@ function ENT:Initialize()
 							ent:EmitSound(sound)
 						 end)
 						 timer.Simple(math.random(4,5)+math.random(), function()
-							if !ent:IsValid() then return end
+							if not ent:IsValid() then return end
 							ent:Remove()
 						 end)
 					 end
@@ -167,7 +167,7 @@ function ENT:Initialize()
 						ent:EmitSound(sound)
 					 end)
 					 timer.Simple(math.random(4,5)+math.random(), function()
-						if !ent:IsValid() then return end
+						if not ent:IsValid() then return end
 						ent:Remove()
 					 end)
 				 end		
@@ -190,7 +190,7 @@ function ENT:Initialize()
 						ent:EmitSound(sound)
 					 end)
 					 timer.Simple(math.random(4,5)+math.random(), function()
-						if !ent:IsValid() then return end
+						if not ent:IsValid() then return end
 						ent:Remove()
 					 end)
 				 end		
@@ -217,7 +217,7 @@ function ENT:Initialize()
 						ent:EmitSound(sound)
 					 end)
 					 timer.Simple(math.random(4,5)+math.random(), function()
-						if !ent:IsValid() then return end
+						if not ent:IsValid() then return end
 						ent:Remove()
 					 end)
 				 end

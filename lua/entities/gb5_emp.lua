@@ -61,14 +61,14 @@ function ENT:Initialize()
 	 self.Used     = false
 	 self.Arming = false
 	 self.Exploding = false
-	 if !(WireAddon == nil) then 
+	 if not (WireAddon == nil) then 
 	  self.Inputs   = Wire_CreateInputs(self, { "Arm", "Detonate" }) 
 	 end
 	end
 end
 
 function ENT:Explode(ply)
-     if !self.Exploded then return end
+     if not self.Exploded then return end
 	 if self.Exploding then return end
 	
 	 local pos = self:LocalToWorld(self:OBBCenter())
@@ -90,12 +90,12 @@ function ENT:Explode(ply)
 	ent:SetVar("DELAY",0.01)
 	ent:SetVar("SOUND", "gbombs_5/explosions/special/emp.mp3")
 	ent:SetVar("Shocktime",1)
-	 if !self:IsValid() then return end 
+	 if not self:IsValid() then return end 
 	 self:StopParticles()
 	
 	 for k, v in pairs(ents.FindInSphere(pos,30000)) do
 		 if v:IsValid() then
-			 if(v.isWacAircraft) && (v.active==true) then
+			 if(v.isWacAircraft) and (v.active==true) then
 				v:setEngine(false)
 				v.engineDead = true							 
 				ParticleEffectAttach("emp_electrify_model",PATTACH_POINT_FOLLOW,v,0) 
@@ -133,7 +133,7 @@ function ENT:Explode(ply)
 							ent:EmitSound(sound)
 						 end)
 						 timer.Simple(math.random(4,5)+math.random(), function()
-							if !ent:IsValid() then return end
+							if not ent:IsValid() then return end
 							ent:Remove()
 						 end)
 					 end		
@@ -156,7 +156,7 @@ function ENT:Explode(ply)
 							ent:EmitSound(sound)
 						 end)
 						 timer.Simple(math.random(4,5)+math.random(), function()
-							if !ent:IsValid() then return end
+							if not ent:IsValid() then return end
 							ent:Remove()
 						 end)
 					 end		
@@ -183,7 +183,7 @@ function ENT:Explode(ply)
 							ent:EmitSound(sound)
 						 end)
 						 timer.Simple(math.random(4,5)+math.random(), function()
-							if !ent:IsValid() then return end
+							if not ent:IsValid() then return end
 							ent:Remove()
 						 end)
 					 end
@@ -207,7 +207,7 @@ function ENT:Explode(ply)
 						ent:EmitSound(sound)
 					 end)
 					 timer.Simple(math.random(4,5)+math.random(), function()
-						if !ent:IsValid() then return end
+						if not ent:IsValid() then return end
 						ent:Remove()
 					 end)
 				 end		
@@ -230,7 +230,7 @@ function ENT:Explode(ply)
 						ent:EmitSound(sound)
 					 end)
 					 timer.Simple(math.random(4,5)+math.random(), function()
-						if !ent:IsValid() then return end
+						if not ent:IsValid() then return end
 						ent:Remove()
 					 end)
 				 end		
@@ -257,7 +257,7 @@ function ENT:Explode(ply)
 						ent:EmitSound(sound)
 					 end)
 					 timer.Simple(math.random(4,5)+math.random(), function()
-						if !ent:IsValid() then return end
+						if not ent:IsValid() then return end
 						ent:Remove()
 					 end)
 				 end
@@ -304,7 +304,7 @@ function ENT:Explode(ply)
 end
 
 function ENT:SpawnFunction( ply, tr )
-     if ( !tr.Hit ) then return end
+     if ( not tr.Hit ) then return end
 	 self.GBOWNER = ply
      local ent = ents.Create( self.ClassName )
 	 ent:SetPhysicsAttacker(ply)

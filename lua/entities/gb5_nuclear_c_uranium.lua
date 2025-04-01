@@ -66,7 +66,7 @@ function ENT:Initialize()
 end
 
 function ENT:SpawnFunction( ply, tr )
-     if ( !tr.Hit ) then return end
+     if ( not tr.Hit ) then return end
 	 self.GBOWNER = ply
 	 self.EntList={}
 	 self.EntCount = 0
@@ -96,28 +96,28 @@ end
 function ENT:Think(ply) 
 	self.spawned = true
     if (SERVER) then 
-	if !self.spawned then return end
+	if not self.spawned then return end
 	local pos = self:GetPos()
 	local dmg = DamageInfo()
 	self.TotalList={}
 	for k, v in pairs(ents.FindInSphere(pos,11)) do
-		if !table.HasValue(self.TotalList,v) then
+		if not table.HasValue(self.TotalList,v) then
 			table.insert(self.TotalList, v )
 		end
 	end
 	for k, v in pairs(self.TotalList) do
 		if v:IsValid() then 
-			if (!(self:GetClass() == v:GetClass()) and !(v:IsWeapon()) and !(table.HasValue(self.EntList,v))) then
+			if (not (self:GetClass() == v:GetClass()) and not (v:IsWeapon()) and not (table.HasValue(self.EntList,v))) then
 				phys = v:GetPhysicsObject( )
-				if (v:IsValid()) and !(table.HasValue(self.EntList,v)) and (phys:IsValid()) then
-					if !v:IsPlayer() and !v:IsNPC() then
+				if (v:IsValid()) and not (table.HasValue(self.EntList,v)) and (phys:IsValid()) then
+					if not v:IsPlayer() and not v:IsNPC() then
 						table.insert(self.EntList, v )
 						self.EntCount = self.EntCount + 1	
 					end
 				end
 			end
 			for k_, v_ in pairs(self.EntList) do
-				if !table.HasValue(self.TotalList, v_) then
+				if not table.HasValue(self.TotalList, v_) then
 					table.remove(self.EntList, k)
 					self.EntCount = self.EntCount - 1
 				end
@@ -135,7 +135,7 @@ function ENT:Think(ply)
 				dmg:SetAttacker(self.GBOWNER)
 				v:EmitSound("player/geiger2.wav", 100, 100)
 				v:TakeDamageInfo(dmg)
-				if !v:IsNPC() then
+				if not v:IsNPC() then
 					v:ConCommand("Rad")
 				end
 			end
@@ -150,7 +150,7 @@ function ENT:Think(ply)
 				dmg:SetAttacker(self.GBOWNER)
 				v:EmitSound("player/geiger3.wav", 100, 100)
 				v:TakeDamageInfo(dmg)
-				if !v:IsNPC() then
+				if not v:IsNPC() then
 					v:ConCommand("Rad")
 				end
 			end
@@ -158,8 +158,8 @@ function ENT:Think(ply)
 		for k, v in pairs(ents.FindInSphere(pos,50)) do
 			if (v:IsPlayer() or v:IsNPC()) and self:IsValid() and v.hazsuited==false then
 				timer.Simple(0.3, function()			
-				    if !v:IsValid() then return end
-					if !self:IsValid() then return end
+				    if not v:IsValid() then return end
+					if not self:IsValid() then return end
 					dmg:SetDamage(math.random(1,3))
 					dmg:SetDamageType(DMG_RADIATION)
 					if self.GBOWNER == nil then
@@ -168,7 +168,7 @@ function ENT:Think(ply)
 					dmg:SetAttacker(self.GBOWNER)
 					v:EmitSound("player/geiger3.wav", 100, 100)
 					v:TakeDamageInfo(dmg)
-					if !v:IsNPC() then
+					if not v:IsNPC() then
 						v:ConCommand("Rad")
 					end
 				end)
@@ -176,7 +176,7 @@ function ENT:Think(ply)
 		end
 	end
 	for k, v in pairs(self.EntList) do
-		if !v:IsValid() then
+		if not v:IsValid() then
 			table.remove(self.EntList, k)
 			self.EntCount = self.EntCount - 1
 		end

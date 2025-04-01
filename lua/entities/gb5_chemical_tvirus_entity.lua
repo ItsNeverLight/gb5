@@ -79,8 +79,6 @@ net.Receive( "gb5_net_tvirus", function( len, pl )
 				hook.Add( "RenderScreenspaceEffects", "T-Virus", function()
 					if scary_time == nil then 
 						scary_time=0
-						
-						LocalPlayer():ChatPrint(table.Random({"Gaahh","My head...","Help me...","I cannot take this anymore!"}))
 					end
 					
 					scary_time=scary_time+1/(1/RealFrameTime()) -- making time a constant
@@ -214,7 +212,7 @@ net.Receive( "gb5_net_tvirus", function( len, pl )
 end )
 
 function ENT:MovePlayerSpeed()
-	if !self.infected:Alive() then return end
+	if not self.infected:Alive() then return end
 	self.infected:SetRunSpeed( math.Clamp((500/137) * (137-self.Seconds),0,500))
 	self.infected:SetWalkSpeed( math.Clamp((250/137) * (137-self.Seconds),0,250))
 end
@@ -226,8 +224,8 @@ end
 function ENT:Think()	
 
 	if (SERVER) then
-	if !self:IsValid() then return end
-	if !self.infected:IsValid() then -- doesnt fucking work
+	if not self:IsValid() then return end
+	if not self.infected:IsValid() then -- doesnt fucking work
 		self:Remove()
 	end
 	
@@ -241,7 +239,7 @@ function ENT:Think()
 	net.Send(self.infected)
 	
 	for k, v in pairs(ents.FindInSphere(self:GetPos(),100)) do
-		if v:IsPlayer() && v:Alive() && !v.isinfected then
+		if v:IsPlayer() and v:Alive() and not v.isinfected then
 			local ent = ents.Create("gb5_chemical_tvirus_entity")
 			ent:SetVar("infected", v)
 			ent:SetPos( self:GetPos() ) 
@@ -250,7 +248,7 @@ function ENT:Think()
 			v.isinfected = true
 			ParticleEffectAttach("zombie_blood",PATTACH_ABSORIGIN_FOLLOW,v, 1) 
 		end
-		if (v:IsNPC() && table.HasValue(npc_tvirus,v:GetClass()) && !v.isinfected) or (v.IsVJHuman==true && !v.isinfected) then
+		if (v:IsNPC() and table.HasValue(npc_tvirus,v:GetClass()) and not v.isinfected) or (v.IsVJHuman==true and not v.isinfected) then
 			if v.gasmasked==false and v.hazsuited==false then
 				local ent = ents.Create("gb5_chemical_tvirus_entity_npc")
 				ent:SetVar("infected", v)
@@ -262,12 +260,12 @@ function ENT:Think()
 			end
 		end	
 	end
-	if (self.Seconds >= 123) && (self.playsound==1) then 
+	if (self.Seconds >= 123) and (self.playsound==1) then 
 		self.infected:EmitSound("gbombs_5/tvirus_infection/ply_infection_final.mp3")
 	end
 	if (self.Seconds >= 130) then -- Zombie time hehe
-		if !self:IsValid() then return end
-		if (file.Exists( "lua/autorun/vj_nmrih_autorun.lua", "GAME" )) && GetConVar("gb5_nmrih_zombies"):GetInt()== 1 then
+		if not self:IsValid() then return end
+		if (file.Exists( "lua/autorun/vj_nmrih_autorun.lua", "GAME" )) and GetConVar("gb5_nmrih_zombies"):GetInt()== 1 then
 			local ent = ents.Create(table.Random(ZombieList2)) -- This creates our zombie entity
 			ent:SetPos(self.infected:GetPos())
 			ent:Spawn() 
@@ -294,7 +292,7 @@ function ENT:Think()
 			self.infected:Kill()
 			self:Remove()
 		else
-			if math.random(1,100)!=100 then
+			if math.random(1,100)~=100 then
 				local ent = ents.Create(table.Random(ZombieList)) -- This creates our zombie entity
 				ent:SetPos(self.infected:GetPos())
 				ent:Spawn() 
@@ -344,9 +342,9 @@ function ENT:Think()
 		end
     end		
 		
-	if !self.infected:Alive() or !self.infected:IsValid() then
+	if not self.infected:Alive() or not self.infected:IsValid() then
 
-		if (file.Exists( "lua/autorun/vj_nmrih_autorun.lua", "GAME" )) && GetConVar("gb5_nmrih_zombies"):GetInt()== 1 then
+		if (file.Exists( "lua/autorun/vj_nmrih_autorun.lua", "GAME" )) and GetConVar("gb5_nmrih_zombies"):GetInt()== 1 then
 			local ent = ents.Create(table.Random(ZombieList2)) -- This creates our zombie entity
 			ent:SetPos(self.infected:GetPos())
 			ent:Spawn() 
@@ -373,7 +371,7 @@ function ENT:Think()
 			self.infected:Kill()
 			self:Remove()
 		else
-			if math.random(1,25)!=25 then
+			if math.random(1,25)~=25 then
 			
 				local ent = ents.Create(table.Random(ZombieList)) -- This creates our zombie entity
 				ent:SetPos(self.infected:GetPos())
@@ -405,7 +403,7 @@ function ENT:Think()
 			else
 
 				for k, v in pairs(player.GetAll()) do
-					v:ChatPrint("Zombie boss has spawned!")
+					v:ChatPrint("Zombie boss has spawnednot ")
 				end
 				local ent = ents.Create(table.Random(ZombieList)) -- This creates our zombie entity
 				ent:SetPos(self.infected:GetPos())
@@ -435,7 +433,7 @@ end
 
 if (SERVER) then
 	function ENT:OnRemove()
-		if !self.infected:IsValid() then return end
+		if not self.infected:IsValid() then return end
 		local infected_player = self.infected
 		infected_player.isinfected = false
 

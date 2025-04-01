@@ -43,6 +43,7 @@ function ENT:Think(ply)
 			 while i < v:GetPhysicsObjectCount() do
 				 phys = v:GetPhysicsObjectNum(i)
 				 if (phys:IsValid()) then
+					 local mass = phys:GetMass()
 					 local F_ang = math.random(1,10)
 					 local dist = (pos - v:GetPos()):Length()
 					 local relation = math.Clamp((self.CURRENTRANGE - dist) / self.CURRENTRANGE, 0, 1)
@@ -59,6 +60,7 @@ function ENT:Think(ply)
 					 end
 					 v:SetMoveType( MOVETYPE_WALK )
 				     
+					 local mass = phys:GetMass()
 					 local F_ang = math.random(1,10)
 					 local dist = (pos - v:GetPos()):Length()
 					 local relation = math.Clamp((self.CURRENTRANGE - dist) / self.CURRENTRANGE, 0, 1)
@@ -69,6 +71,7 @@ function ENT:Think(ply)
 				 if (v:IsPlayer()) and v:IsOnGround() then
 					 v:SetMoveType( MOVETYPE_WALK )
 				   
+					 local mass = phys:GetMass()
 					 local F_ang = math.random(1,5)
 					 local dist = (pos - v:GetPos()):Length()
 					 local relation = math.Clamp((self.CURRENTRANGE - dist) / self.CURRENTRANGE, 0, 1)
@@ -78,6 +81,7 @@ function ENT:Think(ply)
 				 if (v:IsPlayer()) and v:IsOnGround() then
 					 v:SetMoveType( MOVETYPE_WALK )
 				   
+					 local mass = phys:GetMass()
 					 local F_ang = math.random(0,1)
 					 local dist = (pos - v:GetPos()):Length()
 					 local relation = math.Clamp((self.CURRENTRANGE - dist) / self.CURRENTRANGE, 0, 1)

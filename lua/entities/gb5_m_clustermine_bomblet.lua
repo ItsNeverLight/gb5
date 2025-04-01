@@ -54,7 +54,7 @@ ENT.DEFAULT_PHYSFORCE_PLYGROUND      = 1000
 ENT.Decal                            = "scorch_small"
 
 function ENT:SpawnFunction( ply, tr )
-     if ( !tr.Hit ) then return end
+     if ( not tr.Hit ) then return end
      self.GBOWNER = ply
      local ent = ents.Create( self.ClassName )
      ent:SetPhysicsAttacker(ply)
@@ -82,14 +82,14 @@ function ENT:Initialize()
 		end
 		self.Exploded = false
 		timer.Simple(math.random(5,10), function() 
-			if !self:IsValid() then return end
+			if not self:IsValid() then return end
 			self.Exploded=true
 			self:Explode()
 		end)
 	end
 end
 function ENT:Explode()
-     if !self.Exploded then return end
+     if not self.Exploded then return end
 	 local pos = self:LocalToWorld(self:OBBCenter())
 	 
 	 local ent = ents.Create("gb5_shockwave_ent")

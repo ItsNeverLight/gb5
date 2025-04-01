@@ -46,6 +46,7 @@ function ENT:Think(ply)
 				 local dmg = DamageInfo()
 				 dmg:SetDamage(math.random(1,3))
 				 dmg:SetDamageType(DMG_RADIATION)
+				 dmg:SetAttacker(self.GBOWNER)
 				 phys = v:GetPhysicsObjectNum(i)
 				 if v:IsOnFire() then
 					v:Extinguish()
@@ -54,6 +55,7 @@ function ENT:Think(ply)
 					v:Ignite(14,0)
 				 end
 				 if (phys:IsValid()) and not (v:GetClass()=="gb5_fireroar") then
+					 local mass = phys:GetMass()
 					 local F_ang = self.DEFAULT_PHYSFORCE
 					 local dist = (pos - v:GetPos()):Length()
 					 local relation = math.Clamp((self.CURRENTRANGE - dist) / self.CURRENTRANGE, 0, 1)
@@ -72,6 +74,7 @@ function ENT:Think(ply)
 					 if not (self.Ignore==self.GBOWNER) and not (self.Ignoreowner) then
 					 v:SetMoveType( MOVETYPE_WALK )
 					 v:TakeDamageInfo(dmg)
+					 local mass = phys:GetMass()
 					 local F_ang = self.DEFAULT_PHYSFORCE_PLYAIR
 					 local dist = (pos - v:GetPos()):Length()
 					 local relation = math.Clamp((self.CURRENTRANGE - dist) / self.CURRENTRANGE, 0, 1)
@@ -91,6 +94,7 @@ function ENT:Think(ply)
 					 if not (v==self.Ignore) and not (self.Ignoreowner) then
 					 v:SetMoveType( MOVETYPE_WALK )
 					 v:TakeDamageInfo(dmg)
+					 local mass = phys:GetMass()
 					 local F_ang = self.DEFAULT_PHYSFORCE_PLYGROUND
 					 local dist = (pos - v:GetPos()):Length()
 					 local relation = math.Clamp((self.CURRENTRANGE - dist) / self.CURRENTRANGE, 0, 1)

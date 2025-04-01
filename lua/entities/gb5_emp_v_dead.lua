@@ -23,7 +23,7 @@ end
 
 function ENT:Think()
 	if (SERVER) then
-	if !self:IsValid() then return end
+	if not self:IsValid() then return end
 	if self.radowner:IsValid() then 
 		self.pos = string.Explode( " ", tostring(self.radowner:GetPos()) )
 		self:SetPos(Vector(self.pos[1],self.pos[2],self.pos[3]))

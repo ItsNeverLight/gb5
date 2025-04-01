@@ -67,7 +67,7 @@ function ENT:Initialize()
 	 
 	 
 	 timer.Simple(math.random(1,122), function()
-		if !self:IsValid() then return end
+		if not self:IsValid() then return end
 		self:Remove()
 	 end)
 	end
@@ -83,7 +83,7 @@ function ENT:ExploSound(pos)
 end
 
 function ENT:SpawnFunction( ply, tr )
-     if ( !tr.Hit ) then return end
+     if ( not tr.Hit ) then return end
 	 self.GBOWNER = ply
      local ent = ents.Create( self.ClassName )
 	 ent:SetPhysicsAttacker(ply)
@@ -144,14 +144,14 @@ end
 function ENT:Think(ply) 
 	self.spawned = true
     if (SERVER) then 
-	if !self.spawned then return end
+	if not self.spawned then return end
 	local pos = self:GetPos()
 	local dmg = DamageInfo()
 	self:Spread()
 	for k, v in pairs(ents.FindInSphere(pos,530)) do
-		if (v:IsPlayer() or v:IsNPC()) and v.hazsuited==false && self:IsValid() then
+		if (v:IsPlayer() or v:IsNPC()) and v.hazsuited==false and self:IsValid() then
 		
-			if !v:IsValid() then return end
+			if not v:IsValid() then return end
 			dmg:SetDamage(math.random(11,23))
 			dmg:SetDamageType(DMG_RADIATION)
 			if self.GBOWNER == nil then
@@ -160,7 +160,7 @@ function ENT:Think(ply)
 			dmg:SetAttacker(self.GBOWNER)
 			v:EmitSound("player/geiger3.wav", 100, 100)
 			v:TakeDamageInfo(dmg)
-			if !v:IsNPC() then
+			if not v:IsNPC() then
 				v:ConCommand("Rad")
 			end
 		end

@@ -3,11 +3,6 @@ DEFINE_BASECLASS( "base_anim" )
 
 util.PrecacheSound( "BaseExplosionEffect.Sound" ) 
 
---[[
-This is a base for vegetable entities which are not affected by bullets and shit.
-OMFG STOP READING THIS!
---]]
-
 local ExploSnds = {}
 ExploSnds[1]                         =  "BaseExplosionEffect.Sound"
 
@@ -22,7 +17,7 @@ ENT.AdminSpawnable		             =  false
 ENT.PrintName		                 =  "Name"       
 ENT.Author			                 =  "Avatar natsu"     
 ENT.Contact			                 =  "GTFO" 
-ENT.Category                         =  "GTFO!"           
+ENT.Category                         =  "GTFOnot "           
 
 ENT.Model                            =  ""            
 ENT.Effect                           =  ""            
@@ -86,7 +81,7 @@ function ENT:LoadModel()
 end
 
 function ENT:Explode()
-     if !self.Exploded then return end
+     if not self.Exploded then return end
 	 local pos = self:LocalToWorld(self:OBBCenter())
 	 
 	 local ent = ents.Create("gb5_shockwave_ent")
@@ -137,7 +132,7 @@ function ENT:Explode()
 	     end
      end
 	 for k, v in pairs(ents.FindInSphere(pos,self.SpecialRadius/2)) do
-	     if (self.ShouldIgnite and v != self) then
+	     if (self.ShouldIgnite and v ~= self) then
 		     if v:IsOnFire() then
 			     v:Extinguish()
 			 end
@@ -145,7 +140,7 @@ function ENT:Explode()
 			 if self:GetClass()=="gb5_misc_wildfire_vial" or self:GetClass()=="gb5_misc_wildfire_barrel" then
 				ParticleEffectAttach( "neuro_wildfire_burn_outside", PATTACH_ABSORIGIN_FOLLOW, v, 0 )
 			 end
-			 if !v:GetClass()==self:GetClass() then
+			 if not v:GetClass()==self:GetClass() then
 				ParticleEffectAttach( "neuro_gascan_burn_outside", PATTACH_ABSORIGIN_FOLLOW, v, 0 )
 			 end
 		 end
@@ -205,12 +200,12 @@ function ENT:OnTakeDamage(dmginfo)
 
 	 if self:IsValid() then
 	     self.Life = self.Life - dmginfo:GetDamage()
-		 if (self.Life <= self.Life/2) and !self.Exploded and self.Flamable then
+		 if (self.Life <= self.Life/2) and not self.Exploded and self.Flamable then
 		     self:Ignite(self.MaxDelay,0)
 		 end
 		 if (self.Life <= 0) then 
 		     timer.Simple(math.Rand(0,self.MaxDelay),function()
-			     if !self:IsValid() then return end 
+			     if not self:IsValid() then return end 
 			     self.Exploded = true
 			     self:Explode()
 			 end)
@@ -220,7 +215,7 @@ end
 
 function ENT:PhysicsCollide( data, physobj )
      if(self.Exploded) then return end
-     if(!self:IsValid()) then return end
+     if(not self:IsValid()) then return end
 	 if(self.Life <= 0) then return end
 
      if self.ShouldExplodeOnImpact then

@@ -38,14 +38,14 @@ function ENT:Think()
 		hook.Add( "HUDPaint", "Radiation", Radiation)
 	end
 	if (SERVER) then
-	if !self:IsValid() then return end
+	if not self:IsValid() then return end
 	if self.radowner:IsValid() then 
 		self.pos = string.Explode( " ", tostring(self.radowner:GetPos()) )
 		self:SetPos(Vector(self.pos[1],self.pos[2],self.pos[3]))
 		local pos = self:GetPos()
 		self.TotalList={}
 		for k, v in pairs(ents.FindInSphere(pos,self.RadRadius)) do
-			if v:IsPlayer() and !v:IsNPC() and v.hazsuited==false then
+			if v:IsPlayer() and not v:IsNPC() and v.hazsuited==false then
 				local dist = (self:GetPos() - v:GetPos()):Length()
 				local relation = math.Clamp((self.RadRadius - dist) / self.RadRadius, 0, 1)
 				v:SetNWFloat("rad_relation", relation  )
@@ -58,7 +58,7 @@ function ENT:Think()
 
 		for k, v in pairs(self.TotalList) do
 			if v:IsValid() then 
-				if !table.HasValue(self.EntList,v) then
+				if not table.HasValue(self.EntList,v) then
 						if v:IsPlayer() then
 							table.insert(self.EntList, v )
 						end
@@ -66,7 +66,7 @@ function ENT:Think()
 			end
 		end
 		for index, entlist_ply in pairs(self.EntList) do
-			if !table.HasValue(self.TotalList, entlist_ply ) then
+			if not table.HasValue(self.TotalList, entlist_ply ) then
 				if entlist_ply:IsValid() then
 					table.remove(self.EntList, index)
 					entlist_ply:SetNWFloat("rad_relation", 0  )

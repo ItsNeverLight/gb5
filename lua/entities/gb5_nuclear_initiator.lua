@@ -61,7 +61,7 @@ function ENT:Initialize()
 	 self.Used     = false
 	 self.Arming = false
 	 self.Exploding = false
-	  if !(WireAddon == nil) then self.Inputs   = Wire_CreateInputs(self, { "Arm", "Detonate" }) end
+	  if not (WireAddon == nil) then self.Inputs   = Wire_CreateInputs(self, { "Arm", "Detonate" }) end
 	end
 end
 
@@ -69,7 +69,7 @@ function ENT:Explode()
 	 self.uranium_mul   = 0
 	 self.plutonium_mul = 0
 	 self.tritium_mul   = 0 
-     if !self.Exploded then return end
+     if not self.Exploded then return end
 	 if self.Exploding then return end
 	
 	 local pos = self:LocalToWorld(self:OBBCenter())
@@ -95,7 +95,7 @@ function ENT:Explode()
 		self:Remove()
 	
 	 end
-	if (self.uranium_mul==1) or (self.uranium_mul == 2) then -- Then we have a fizzure! (Davy Crockett)
+	if (self.uranium_mul==1) or (self.uranium_mul == 2) then -- Then we have a fizzurenot  (Davy Crockett)
 	
 		local pos = self:LocalToWorld(self:OBBCenter())
 		self:SetModel("models/gibs/scanner_gib02.mdl")
@@ -171,14 +171,14 @@ function ENT:Explode()
 		 end
 		 for k, v in pairs(ents.FindInSphere(pos,500)) do
 			if (v:IsValid() or v:IsPlayer()) and (v.forcefielded==false or v.forcefielded==nil) then
-				if v:IsPlayer() && !v:IsNPC() then
+				if v:IsPlayer() and not v:IsNPC() then
 					v:SetModel("models/Humans/Charple04.mdl")
 					ParticleEffectAttach("nuke_player_vaporize_fatman",PATTACH_POINT_FOLLOW,ent,0) 
 					v:Kill()
 				end
 			end
 		 end
-		 if !self:IsValid() then return end  
+		 if not self:IsValid() then return end  
 		 self:SetModel("models/gibs/scanner_gib02.mdl")
 		 self.Exploding = true
 		 self:StopParticles()
@@ -225,7 +225,7 @@ function ENT:Explode()
 				end
 			end
 		end
-	elseif (self.uranium_mul>=3) and (self.uranium_mul<=6) then -- Then we have fission! 
+	elseif (self.uranium_mul>=3) and (self.uranium_mul<=6) then -- Then we have fissionnot  
 		for k, v in pairs(ents.FindInSphere(pos,1500*self.uranium_mul)) do
 			 if (v:IsValid() or v:IsPlayer()) and (v.forcefielded==false or v.forcefielded==nil) then
 				if v:IsValid() and v:GetPhysicsObject():IsValid() then
@@ -235,7 +235,7 @@ function ENT:Explode()
 		 end
 		 for k, v in pairs(ents.FindInSphere(pos,2000)) do
 			if (v:IsValid() or v:IsPlayer()) and (v.forcefielded==false or v.forcefielded==nil) then
-				if v:IsPlayer() && !v:IsNPC() then
+				if v:IsPlayer() and not v:IsNPC() then
 					v:SetModel("models/Humans/Charple04.mdl")
 					ParticleEffectAttach("nuke_player_vaporize_fatman",PATTACH_POINT_FOLLOW,ent,0) 
 					v:Kill()
@@ -244,7 +244,7 @@ function ENT:Explode()
 		 end
 		
 		 timer.Simple(2, function()
-			 if !self:IsValid() then return end 
+			 if not self:IsValid() then return end 
 			 local ent = ents.Create("gb5_shockwave_ent")
 			 ent:SetPos( pos ) 
 			 ent:Spawn()
@@ -322,14 +322,14 @@ function ENT:Explode()
 			 if trace.HitWorld then
 				 ParticleEffect("littleboy_main",pos,Angle(0,0,0),nil)	
 				 timer.Simple(2, function()
-					 if !self:IsValid() then return end 
+					 if not self:IsValid() then return end 
 					 ParticleEffect("",trace.HitPos,Angle(0,0,0),nil)	
 					 self:Remove()
 			 end)	
 			 else 
 				 ParticleEffect("littleboy_air_main",pos,Angle(0,0,0),nil) 
 				 timer.Simple(2, function()
-					 if !self:IsValid() then return end 
+					 if not self:IsValid() then return end 
 					 ParticleEffect("",trace.HitPos,Angle(0,0,0),nil)	
 					 self:Remove()
 				end)	
@@ -342,7 +342,7 @@ function ENT:Explode()
 				 end
 			 end
 		 end
-	elseif (self.uranium_mul>=7 && self.uranium_mul<=10) and (self.plutonium_mul >= 1 && self.plutonium_mul <=2) then -- Then we have fission! 	
+	elseif (self.uranium_mul>=7 and self.uranium_mul<=10) and (self.plutonium_mul >= 1 and self.plutonium_mul <=2) then -- Then we have fissionnot  	
 		for k, v in pairs(ents.FindInSphere(pos,900*self.uranium_mul)) do
 			 if (v:IsValid() or v:IsPlayer()) and (v.forcefielded==false or v.forcefielded==nil) then
 				if (v:IsValid() or v:IsPlayer()) and (v.forcefielded==false or v.forcefielded==nil) then
@@ -360,7 +360,7 @@ function ENT:Explode()
 		 end
 		
 		 timer.Simple(2, function()
-			 if !self:IsValid() then return end 
+			 if not self:IsValid() then return end 
 			 local ent = ents.Create("gb5_shockwave_ent")
 			 ent:SetPos( pos ) 
 			 ent:Spawn()
@@ -445,7 +445,7 @@ function ENT:Explode()
 				 if trace.HitWorld then
 					 ParticleEffect("trinity_main",pos,Angle(0,0,0),nil)	
 					 timer.Simple(2, function()
-						 if !self:IsValid() then return end 
+						 if not self:IsValid() then return end 
 						 self:Remove()
 				 end)	
 				 else 
@@ -459,12 +459,12 @@ function ENT:Explode()
 					 ent:Activate()	
 				 end
 				 timer.Simple(2, function()
-					if !self:IsValid() then return end
+					if not self:IsValid() then return end
 					self:Remove()
 				 end)
 			 end
 		end
-	elseif (self.uranium_mul>=11 && self.uranium_mul<=15) and (self.plutonium_mul >= 3 && self.plutonium_mul <=5) then 
+	elseif (self.uranium_mul>=11 and self.uranium_mul<=15) and (self.plutonium_mul >= 3 and self.plutonium_mul <=5) then 
 		 local ent = ents.Create("gb5_shockwave_ent")
 		 ent:SetPos( pos ) 
 		 ent:Spawn()
@@ -527,7 +527,7 @@ function ENT:Explode()
 		 end
 		 for k, v in pairs(ents.FindInSphere(pos,300*self.uranium_mul)) do
 			if (v:IsValid() or v:IsPlayer()) and (v.forcefielded==false or v.forcefielded==nil) then
-				if v:IsPlayer() && !v:IsNPC() then
+				if v:IsPlayer() and not v:IsNPC() then
 					v:SetModel("models/Humans/Charple04.mdl")
 					v:Kill()
 				end
@@ -535,7 +535,7 @@ function ENT:Explode()
 		 end
 
 		 timer.Simple(2, function()
-			 if !self:IsValid() then return end 
+			 if not self:IsValid() then return end 
 			 constraint.RemoveAll(self)
 			 self:StopParticles()
 		 end)
@@ -571,13 +571,13 @@ function ENT:Explode()
 			 if trace.HitWorld then
 				 ParticleEffect("fatman_main",pos,Angle(0,0,0),nil)	
 				 timer.Simple(2, function()
-					 if !self:IsValid() then return end 
+					 if not self:IsValid() then return end 
 					 self:Remove()
 			 end)	
 			 else 
 				 ParticleEffect("fatman_air",pos,Angle(0,0,0),nil) 
 				 timer.Simple(2, function()
-					 if !self:IsValid() then return end 
+					 if not self:IsValid() then return end 
 					 ParticleEffect("",trace.HitPos,Angle(0,0,0),nil)	
 					 self:Remove()
 				end)	
@@ -589,7 +589,7 @@ function ENT:Explode()
 				 end
 			 end
 		 end
-	elseif (self.uranium_mul>=16 && self.uranium_mul<=20) and (self.plutonium_mul >= 6 && self.plutonium_mul <=10) and (self.tritium_mul >= 1 && self.tritium_mul <=2) then 
+	elseif (self.uranium_mul>=16 and self.uranium_mul<=20) and (self.plutonium_mul >= 6 and self.plutonium_mul <=10) and (self.tritium_mul >= 1 and self.tritium_mul <=2) then 
 		 local pos = self:LocalToWorld(self:OBBCenter())
 		 local ent = ents.Create("gb5_shockwave_ent")
 		 ent:SetPos( pos ) 
@@ -680,13 +680,13 @@ function ENT:Explode()
 			 if trace.HitWorld then
 				 ParticleEffect("highyield_nuke_ground_main",pos,Angle(0,0,0),nil)	
 				 timer.Simple(2, function()
-					 if !self:IsValid() then return end 
+					 if not self:IsValid() then return end 
 					 self:Remove()
 			 end)	
 			 else 
 				 ParticleEffect("highyield_nuke_air_main",pos,Angle(0,0,0),nil) 
 				 timer.Simple(2, function()
-					 if !self:IsValid() then return end 
+					 if not self:IsValid() then return end 
 					 ParticleEffect("",trace.HitPos,Angle(0,0,0),nil)	
 					 self:Remove()
 				 end)	
@@ -698,7 +698,7 @@ function ENT:Explode()
 				 end
 			 end
 		 end
-	elseif (self.uranium_mul>=21 && self.uranium_mul<=50) and (self.plutonium_mul >= 11 && self.plutonium_mul <=50) and (self.tritium_mul >= 3 && self.tritium_mul <=50) then 
+	elseif (self.uranium_mul>=21 and self.uranium_mul<=50) and (self.plutonium_mul >= 11 and self.plutonium_mul <=50) and (self.tritium_mul >= 3 and self.tritium_mul <=50) then 
 		 local pos = self:LocalToWorld(self:OBBCenter())
 		 local ent = ents.Create("gb5_shockwave_ent")
 		 ent:SetPos( pos ) 
@@ -789,12 +789,12 @@ function ENT:Explode()
 			 if trace.HitWorld then
 				 ParticleEffect("tsar_bomba_ground",pos,Angle(0,0,0),nil)	
 				 timer.Simple(2, function()
-					 if !self:IsValid() then return end 
+					 if not self:IsValid() then return end 
 					 self:Remove()
 			 end)	
 			 else 
 				 timer.Simple(2, function()
-					 if !self:IsValid() then return end 
+					 if not self:IsValid() then return end 
 					 ParticleEffect("",trace.HitPos,Angle(0,0,0),nil)	
 					 self:Remove()
 				end)				 
@@ -814,7 +814,7 @@ function ENT:Explode()
 end
 
 function ENT:SpawnFunction( ply, tr )
-     if ( !tr.Hit ) then return end
+     if ( not tr.Hit ) then return end
 	 self.GBOWNER = ply
      local ent = ents.Create( self.ClassName )
 	 ent:SetPhysicsAttacker(ply)

@@ -14,37 +14,47 @@ ENT.Spawnable		            	 =  false
 ENT.AdminSpawnable		             =  false       
 
 ENT.PrintName		                 =  "Name"        
-ENT.Author			                 =  "Chappi"      
-ENT.Contact			                 =  "Add me on steam fagit" 
+ENT.Author			                 =  "natsu"      
+ENT.Contact			                 =  "natsu" 
 ENT.Category                         =  ""            
 
 ENT.Model                            =  ""            
 ENT.Effect                           =  ""            
 ENT.EffectAir                        =  ""           
 ENT.EffectWater                      =  ""            
-ENT.ExplosionSound                   =  ""            
+ENT.ExplosionSound                   =  "gbombs_5/explosions/heavy_bomb/ex2.mp3"          
 ENT.ArmSound                         =  ""            
 ENT.ActivationSound                  =  ""    
-ENT.Bomblet                          =  ""         --What should we spawn?
+ENT.NBCEntity                        =  ""   
 
-ENT.ShouldExplodeOnImpact            =  true
-ENT.Flamable                         =  false
-ENT.UseRandomSounds                  =  true
-ENT.Timed                            =  false
-ENT.RandomAngles                     =  false          -- If this is false, the bomblets will spawn facing the general bomb direction.
 
-ENT.Life                             =  25                                  
-ENT.MaxDelay                         =  2                                 
-ENT.TraceLength                      =  500
-ENT.ImpactSpeed                      =  700
-ENT.Mass                             =  500
-ENT.ArmDelay                         =  1   
+ENT.ShouldUnweld                     =  false         
+ENT.ShouldIgnite                     =  false         
+ENT.ShouldExplodeOnImpact            =  false         
+ENT.Flamable                         =  false        
+ENT.UseRandomSounds                  =  true         
+ENT.UseRandomModels                  =  false                
+ENT.Timed                            =  false    
+ENT.IsNBC                            =  false
+
+ENT.ExplosionDamage                  =  0             
+ENT.PhysForce                        =  0             
+ENT.ExplosionRadius                  =  0            
+ENT.SpecialRadius                    =  0             
+ENT.MaxIgnitionTime                  =  5             
+ENT.Life                             =  20           
+ENT.MaxDelay                         =  2             
+ENT.TraceLength                      =  500           
+ENT.ImpactSpeed                      =  500          
+ENT.Mass                             =  0                     
+ENT.ArmDelay                         =  2                      
 ENT.Timer                            =  0
-ENT.NumBomblets                      =  25              -- Number of the bomblets - don't go overboard with thisnot 
-ENT.Magnitude                        =  750             -- The bigger the number, the further the bomblets will spread
-ENT.Shape                            =  "RANDOM"        -- Can be "RANDOM" or "SPHERE"
+ENT.Shocktime                        =  1
 
-ENT.GBOWNER                          =  nil             -- don't you fucking touch this.
+ENT.DEFAULT_PHYSFORCE                = 500
+ENT.DEFAULT_PHYSFORCE_PLYAIR         = 100
+ENT.DEFAULT_PHYSFORCE_PLYGROUND         = 5000 
+ENT.GBOWNER                          =  nil            
 
 function ENT:Initialize()
  if (SERVER) then
@@ -66,7 +76,7 @@ function ENT:Initialize()
 	 self.Exploded = false
 	 self.Used     = false
 	 self.Arming   = false
-	 if not (WireAddon == nil) then self.Inputs   = Wire_CreateInputs(self, { "Arm", "Detonate" }) end
+	  if not (WireAddon == nil) then self.Inputs   = Wire_CreateInputs(self, { "Arm", "Detonate" }) end
 	end
 end
 
@@ -86,7 +96,7 @@ function ENT:TriggerInput(iname, value)
 	 if (iname == "Arm") then
          if (value >= 1) then
              if (not self.Exploded and not self.Armed and not self.Arming) then
-				 self:EmitSound(self.ActivationSound)
+			     self:EmitSound(self.ActivationSound)
                  self:Arm()
              end 
          end
@@ -104,70 +114,94 @@ end
 
 
 function ENT:Explode()
-     if not self.Exploded then return end
-	 local pos = self:LocalToWorld(self:OBBCenter())
-	 self:ExploSound(pos)
-	      if not self.Exploded then return end
-	 if self.UseRandomSounds then
-         sound.Play(table.Random(ExploSnds), pos, 180, 100,1)
-     else
-	     sound.Play(self.ExplosionSound, pos, 180, 100,1)
-	 end
-end
-
-function ENT:Explode()
-     if not self.Exploded then return end
-	 local pos = self:LocalToWorld(self:OBBCenter())
+    if not self.Exploded then return end
+    if self.Exploding then return end
     
-		 
-	 for i=0, (self.NumBomblets-1) do
-	     if not self:IsValid() then return end
-		 local bomblet = ents.Create(self.Bomblet)
-		 bomblet:SetVar("GBOWNER",self.GBOWNER)
-		 bomblet:SetPos(pos)
-		 if not self.RandomAngles then
-		     bomblet:SetAngles((self:GetForward() * self.AngleModifier):Angle())
-		     --bomblet:SetAngles(self:GetAngles())
-		 else
-		     bomblet:SetAngles(Angle(math.random(-180,180),math.random(-180,180),math.random(-180,180)))
-		 end
-		 bomblet:Spawn()
-		 bomblet:Activate()
-		 timer.Simple(10, function()
-			if not bomblet:IsValid() then return end
-			bomblet:Remove()
-		 end)
-		 local bphys = bomblet:GetPhysicsObject()
-		 local phys = self:GetPhysicsObject()
-		 if bphys:IsValid() and phys:IsValid() then
-		     if self.Shape == "SPHERE" then
-			     bphys:ApplyForceCenter(VectorRand():GetNormal() * bphys:GetMass() * self.Magnitude)
-			 else -- shape == anything else then we go totally random.
-			     bphys:ApplyForceCenter(VectorRand() * bphys:GetMass() * self.Magnitude)
-			 end
-			 bphys:AddVelocity(phys:GetVelocity()/2)
-		 end
-	 end
-           
-     if(self:WaterLevel() >= 1) then
-	     local trdata   = {}
-		 local trlength = Vector(0,0,9000)
+    local pos = self:LocalToWorld(self:OBBCenter())
+    self:SetModel("models/gibs/scanner_gib02.mdl")
+    self.Exploding = true
+    constraint.RemoveAll(self)
+    local physo = self:GetPhysicsObject()
+    physo:Wake()
+    physo:EnableMotion(false)
+    local ent = ents.Create("gb5_shockwave_sound_lowsh")
+    ent:SetPos(pos)
+    ent:Spawn()
+    ent:Activate()
+    ent:SetVar("GBOWNER", self.GBOWNER)
+    ent:SetVar("MAX_RANGE", 500000)
+    ent:SetVar("SHOCKWAVE_INCREMENT", 20000)
+    ent:SetVar("DELAY", 0.01)
+    ent:SetVar("Shocktime", 5)
+    ent:SetVar("SOUND", "gbombs_5/explosions/heavy_bomb/ex2.mp3")
+    self.affected = {}
+    for k, v in pairs(ents.FindInSphere(pos, 1800)) do
+        if v:IsPlayer() then
+            table.insert(self.affected, v)
+        end
+    end
+	
+	   local targets = ents.FindInSphere(self:GetPos(), self.ExplosionRadius)
+    for _, target in ipairs(targets) do
+        if target:IsValid() and target:IsPlayer() then
+            local damageInfo = DamageInfo()
+            damageInfo:SetDamage(self.ExplosionDamage)
+            damageInfo:SetAttacker(self.GBOWNER)
+            damageInfo:SetInflictor(self)
+            damageInfo:SetDamageType(DMG_BLAST)
+            target:TakeDamageInfo(damageInfo)
+        end
+    end
 
-		 trdata.start   = pos
+    timer.Simple(2.5, function()
+        if not self:IsValid() then return end
+        local ent = ents.Create("gb5_shockwave_sound_lowsh")
+        ent:SetPos(pos)
+        ent:Spawn()
+        ent:Activate()
+        ent:SetVar("GBOWNER", self.GBOWNER)
+        ent:SetVar("MAX_RANGE", 1500)
+        ent:SetVar("SHOCKWAVE_INCREMENT", 100)
+        ent:SetVar("DELAY", 0.01)
+        ent:SetVar("Shocktime", 1)
+        ent:SetVar("SOUND", "gbombs_5/explosions/special/endothermic_freeze.wav")
+
+        local ent = ents.Create("gb5_shockwave_cold")
+        ent:SetPos(pos)
+        ent:Spawn()
+        ent:Activate()
+        ent:SetVar("DEFAULT_PHYSFORCE", 25)
+        ent:SetVar("DEFAULT_PHYSFORCE_PLYAIR", 25)
+        ent:SetVar("DEFAULT_PHYSFORCE_PLYGROUND", 25)
+        ent:SetVar("GBOWNER", self.GBOWNER)
+        ent:SetVar("MAX_RANGE", 1500)
+        ent:SetVar("SHOCKWAVE_INCREMENT", 100)
+        ent:SetVar("DELAY", 0.1)
+        timer.Simple(10, function()
+            if not self:IsValid() then return end
+            self:Remove()
+        end)
+    end)
+	
+	 if(self:WaterLevel() >= 1) then
+		 local trdata   = {}
+		 local trlength = Vector(0,0,9000)
+		 
+	     trdata.start   = pos
 		 trdata.endpos  = trdata.start + trlength
 		 trdata.filter  = self
+		 
 		 local tr = util.TraceLine(trdata) 
-
 		 local trdat2   = {}
 	     trdat2.start   = tr.HitPos
 		 trdat2.endpos  = trdata.start - trlength
 		 trdat2.filter  = self
 		 trdat2.mask    = MASK_WATER + CONTENTS_TRANSLUCENT
-			 
+			
 		 local tr2 = util.TraceLine(trdat2)
 			 
 		 if tr2.Hit then
-		     ParticleEffect(self.EffectWater, tr2.HitPos, Angle(0,0,0), nil) 
+		     ParticleEffect(self.EffectWater, tr2.HitPos, Angle(0,0,0), nil)
 		 end
 	 else
 		 local tracedata    = {}
@@ -176,13 +210,21 @@ function ENT:Explode()
 		 tracedata.filter   = self.Entity
 				
 		 local trace = util.TraceLine(tracedata)
+	     
 		 if trace.HitWorld then
-		     ParticleEffect(self.Effect,pos,self:GetAngles(),nil)		
+		     ParticleEffect(self.Effect,pos,Angle(0,0,0),nil)
 		 else 
 			 ParticleEffect(self.EffectAir,pos,Angle(0,0,0),nil) 
-         end
+		 end
+     end
+	 if self.IsNBC then
+	     local nbc = ents.Create(self.NBCEntity)
+		 nbc:SetVar("GBOWNER",self.GBOWNER)
+		 nbc:SetPos(self:GetPos())
+		 nbc:Spawn()
+		 nbc:Activate()
 	 end
-	 self:Remove()
+     self:Remove()
 end
 
 function ENT:OnTakeDamage(dmginfo)

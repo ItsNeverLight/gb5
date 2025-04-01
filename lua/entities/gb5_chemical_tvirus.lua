@@ -69,14 +69,14 @@ function ENT:Initialize()
 	 self.Exploded = false
 	 self.Used     = false
 	 self.Arming   = false
-	  if !(WireAddon == nil) then self.Inputs   = Wire_CreateInputs(self, { "Arm", "Detonate" }) end
+	  if not (WireAddon == nil) then self.Inputs   = Wire_CreateInputs(self, { "Arm", "Detonate" }) end
 	end
 end
 
 function ENT:Explode()
 	sound.Play("physics/glass/glass_bottle_break1.wav", self:GetPos(), 100, 100, 1)
 	for k, v in pairs(ents.FindInSphere(self:GetPos(),100)) do
-		if (v:IsPlayer() && v:Alive() && !v.isinfected) then
+		if (v:IsPlayer() and v:Alive() and not v.isinfected) then
 			if v.gasmasked==false and v.hazsuited==false then
 				local ent = ents.Create("gb5_chemical_tvirus_entity")
 				ent:SetVar("infected", v)
@@ -84,19 +84,19 @@ function ENT:Explode()
 				ent:Spawn()
 				ent:Activate()
 				v.isinfected = true
-				ParticleEffectAttach("zombie_blood",PATTACH_POINT_FOLLOW,v,0 ) 
+				ParticleEffectAttach("vx_gas_ground",PATTACH_POINT_FOLLOW,v,0 ) 
 			end
 			
 		end
 		
-		if (v:IsNPC() && table.HasValue(npc_tvirus,v:GetClass()) && !v.isinfected) or (v.IsVJHuman==true && !v.isinfected) then
+		if (v:IsNPC() and table.HasValue(npc_tvirus,v:GetClass()) and not v.isinfected) or (v.IsVJHuman==true and not v.isinfected) then
 			local ent = ents.Create("gb5_chemical_tvirus_entity_npc")
 			ent:SetVar("infected", v)
 			ent:SetPos( self:GetPos() ) 
 			ent:Spawn()
 			ent:Activate()
 			v.isinfected = true
-			ParticleEffectAttach("zombie_blood",PATTACH_ABSORIGIN_FOLLOW,v, 1) 
+			ParticleEffectAttach("vx_gas_ground",PATTACH_ABSORIGIN_FOLLOW,v, 1) 
 		end	
 	end
 	
@@ -108,7 +108,7 @@ function ENT:Explode()
 end
 
 function ENT:SpawnFunction( ply, tr )
-     if ( !tr.Hit ) then return end
+     if ( not tr.Hit ) then return end
      local ent = ents.Create( self.ClassName )
      ent:SetPhysicsAttacker(ply)
      ent:SetPos( tr.HitPos + tr.HitNormal * 26 ) 

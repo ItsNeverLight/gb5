@@ -53,8 +53,8 @@ function ENT:Think()
 		hook.Add( "HUDPaint", "Draw_Mod", Draw_Mod)
 	end
 	if (SERVER) then
-	if !self:IsValid() then return end
-	if !self.radowner:Alive() then
+	if not self:IsValid() then return end
+	if not self.radowner:Alive() then
 		self:Remove()
 	end
 	if self.radowner:IsValid() then 
@@ -69,7 +69,7 @@ function ENT:Think()
 		local pos = self:GetPos()
 		self.TotalList={}
 		for k, v in pairs(ents.FindInSphere(pos,self.RadRadius)) do
-			if v:IsPlayer() and !v:IsNPC() then
+			if v:IsPlayer() and not v:IsNPC() then
 				if v.accumilation==nil then 
 					v.accumilation = 0.5
 				end
@@ -94,13 +94,13 @@ function ENT:Think()
 		if self.radowner:Health() < 1000 then
 			self.radowner:SetHealth(self.radowner:Health() + 5)
 		end
-		if (self.radowner.shadowed==true) && ( self.radowner:KeyDown( IN_JUMP ) ) then
+		if (self.radowner.shadowed==true) and ( self.radowner:KeyDown( IN_JUMP ) ) then
 			self.radowner:SetMoveType( MOVETYPE_WALK )
 			self.radowner:SetVelocity( Vector(0,0,15) )
 		end
 		for k, v in pairs(self.TotalList) do
 			if v:IsValid() then 
-				if !table.HasValue(self.EntList,v) then
+				if not table.HasValue(self.EntList,v) then
 					if v:IsPlayer() then
 						table.insert(self.EntList, v )
 					end
@@ -108,7 +108,7 @@ function ENT:Think()
 			end
 		end
 		for index, entlist_ply in pairs(self.EntList) do
-			if !table.HasValue(self.TotalList, entlist_ply ) then
+			if not table.HasValue(self.TotalList, entlist_ply ) then
 				if entlist_ply:IsValid() then
 					table.remove(self.EntList, index)
 					entlist_ply:SetNWInt("rad_relation", 0  )

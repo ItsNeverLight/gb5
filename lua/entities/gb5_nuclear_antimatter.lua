@@ -61,18 +61,18 @@ function ENT:Initialize()
 	 self.Used     = false
 	 self.Arming = false
 	 self.Exploding = false
-	  if !(WireAddon == nil) then self.Inputs   = Wire_CreateInputs(self, { "Arm", "Detonate" }) end
+	  if not (WireAddon == nil) then self.Inputs   = Wire_CreateInputs(self, { "Arm", "Detonate" }) end
 	end
 end
 
 function ENT:Arm()
-     if(!self:IsValid()) then return end
+     if(not self:IsValid()) then return end
 	 if(self.Exploded) then return end
 	 if(self.Armed) then return end
 	 self.Arming = true
 	 self.Used = true
 	 timer.Simple(self.ArmDelay, function()
-	     if !self:IsValid() then return end 
+	     if not self:IsValid() then return end 
 	     self.Armed = true
 		 self.Arming = false
 		 self:EmitSound(self.ArmSound)
@@ -80,9 +80,9 @@ function ENT:Arm()
 		 ParticleEffectAttach("flash_antimatter_warning",PATTACH_POINT_FOLLOW,self,0 ) 
 		 if(self.Timed) then
 	         timer.Simple(self.Timer, function()
-	             if !self:IsValid() then return end 
+	             if not self:IsValid() then return end 
 				 timer.Simple(math.Rand(0,self.MaxDelay),function()
-			         if !self:IsValid() then return end 
+			         if not self:IsValid() then return end 
 			         self.Exploded = true
 			         self:Explode()
 				 end)
@@ -91,7 +91,7 @@ function ENT:Arm()
 	 end)
 end	 
 function ENT:Explode()
-	if !self.Exploded then return end
+	if not self.Exploded then return end
 	if self.Exploding then return end
 	local pos = self:LocalToWorld(self:OBBCenter())
 	self:SetMoveType( MOVETYPE_NONE )
@@ -100,7 +100,7 @@ function ENT:Explode()
 	ParticleEffect("antimatter_main_burst",pos,Angle(0,0,0),nil)	
 	self.Exploding = true
 	timer.Simple(0.2, function()
-		if !self:IsValid() then return end
+		if not self:IsValid() then return end
 		for k, v in pairs(ents.FindInSphere(self:GetPos(), 5000)) do
 			if v:GetClass()=="gb5_redmatter_pull" then
 				v:SetMoveType( MOVETYPE_VPHYSICS )
@@ -148,7 +148,7 @@ function ENT:Explode()
 	    ent:SetVar("DELAY",0.5)
 	end)
 	timer.Simple(8, function()	
-		if !self:IsValid() then return end
+		if not self:IsValid() then return end
 		local ent = ents.Create("gb5_shockwave_ent_instant")
 		ent:SetPos( pos ) 
 		ent:Spawn()
@@ -162,7 +162,7 @@ function ENT:Explode()
 	    ent:SetVar("DELAY",0.5)
 	end)
 	timer.Simple(20, function()	
-		if !self:IsValid() then return end
+		if not self:IsValid() then return end
 		local ent = ents.Create("gb5_shockwave_ent")
 		ent:SetPos( pos ) 
 		ent:Spawn()
@@ -176,7 +176,7 @@ function ENT:Explode()
 		ent:SetVar("DELAY",0.1)
 	end)
 	timer.Simple(23, function()	
-		if !self:IsValid() then return end
+		if not self:IsValid() then return end
 		local ent = ents.Create("gb5_shockwave_ent")
 		ent:SetPos( pos ) 
 		ent:Spawn()
@@ -196,7 +196,7 @@ end
 
 
 function ENT:SpawnFunction( ply, tr )
-     if ( !tr.Hit ) then return end
+     if ( not tr.Hit ) then return end
 	 self.GBOWNER = ply
      local ent = ents.Create( self.ClassName )
 	 ent:SetPhysicsAttacker(ply)

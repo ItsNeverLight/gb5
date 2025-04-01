@@ -113,7 +113,7 @@ function ENT:Explode()
 		if GetConVar("gb5_sound_speed"):GetInt() == 0 then
 			ent:SetVar("SHOCKWAVE_INCREMENT",200)
 		elseif GetConVar("gb5_sound_speed"):GetInt()== 1 then
-			ent:SetVar("SHOCKWAVE_INCREMENT",300)
+			eent:SetVar("SHOCKWAVE_INCREMENT",300)
 		elseif GetConVar("gb5_sound_speed"):GetInt() == 2 then
 			ent:SetVar("SHOCKWAVE_INCREMENT",400)
 		elseif GetConVar("gb5_sound_speed"):GetInt() == -1 then

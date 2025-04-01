@@ -48,7 +48,7 @@ function ENT:ExploSound(pos)
 end
 
 function ENT:SpawnFunction( ply, tr )
-     if ( !tr.Hit ) then return end
+     if ( not tr.Hit ) then return end
 		 
 	local ent = ents.Create("prop_vehicle_prisoner_pod") 
 	ent:SetModel("models/vehicles/prisoner_pod_inner.mdl") 

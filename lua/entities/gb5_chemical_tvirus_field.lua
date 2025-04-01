@@ -17,7 +17,7 @@ function ENT:Initialize()
 	     self:SetMoveType( MOVETYPE_NONE )
 	     self:SetUseType( ONOFF_USE ) 
 		 self:SetNoDraw(true)
-		 ParticleEffectAttach("tvirus_virus_spread",PATTACH_POINT_FOLLOW,self,0 ) 
+		 ParticleEffectAttach("tvirus_virus_spread", PATTACH_ABSORIGIN_FOLLOW, self, -1)
 		 timer.Simple(10, function()
 			if !self:IsValid() then return end
 			self:Remove()
@@ -28,10 +28,10 @@ end
 
 function ENT:Think()
 	if (SERVER) then
-	if !self:IsValid() then return end
+	if not self:IsValid() then return end
 
 	for k, v in pairs(ents.FindInSphere(self:GetPos(), 50)) do
-		if (v:IsPlayer() && v:Alive() && !v.isinfected) then
+		if (v:IsPlayer() and v:Alive() and not v.isinfected) then
 			if v.gasmasked==false and v.hazsuited==false then
 				local ent = ents.Create("gb5_chemical_tvirus_entity")
 				ent:SetVar("infected", v)
@@ -44,7 +44,7 @@ function ENT:Think()
 			
 		end
 		
-		if (v:IsNPC() && table.HasValue(npc_tvirus,v:GetClass()) && !v.isinfected) or (v.IsVJHuman==true && !v.isinfected) then
+		if (v:IsNPC() and table.HasValue(npc_tvirus,v:GetClass()) and not v.isinfected) or (v.IsVJHuman==true and not v.isinfected) then
 			local ent = ents.Create("gb5_chemical_tvirus_entity_npc")
 			ent:SetVar("infected", v)
 			ent:SetPos( self:GetPos() ) 

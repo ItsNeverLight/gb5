@@ -43,8 +43,8 @@ end
 
 function ENT:Think()
 	if (SERVER) then
-	if !self:IsValid() then return end
-	if !self.radowner:Alive() then
+	if not self:IsValid() then return end
+	if not self.radowner:Alive() then
 		self:Remove()
 	end
 	if self.radowner:IsValid() then 
@@ -61,7 +61,7 @@ function ENT:Think()
 		if self.radowner:Health() < 1000 then
 			self.radowner:SetHealth(self.radowner:Health() + 1)
 		end
-		if (self.radowner.shadowed==true) && ( self.radowner:KeyDown( IN_JUMP ) ) then
+		if (self.radowner.shadowed==true) and ( self.radowner:KeyDown( IN_JUMP ) ) then
 			self.radowner:SetMoveType( MOVETYPE_WALK )
 			self.radowner:SetVelocity( Vector(0,0,15) )
 		end

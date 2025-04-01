@@ -70,13 +70,13 @@ if SERVER then
 		 self.Arming = false
 		 self.Exploding = false
 		 
-		  if !(WireAddon == nil) then self.Inputs   = Wire_CreateInputs(self, { "Arm", "Detonate" }) end
+		  if not (WireAddon == nil) then self.Inputs   = Wire_CreateInputs(self, { "Arm", "Detonate" }) end
 	end
 end
 
 if SERVER then
 	function ENT:Explode()
-		 if !self.Exploded then return end
+		 if not self.Exploded then return end
 		 if self.Exploding then return end
 		
 		 self:EmitSound("gbombs_5/explosions/light_bomb/c2_timer.mp3")
@@ -84,7 +84,7 @@ if SERVER then
 		 local physo = self:GetPhysicsObject()
 		 physo:Wake()	
 		 timer.Simple(4, function()
-			 if !self:IsValid() then return end 
+			 if not self:IsValid() then return end 
 			 self.Exploding = true
 			 local pos = self:GetPos()
 			 for k, v in pairs(ents.FindInSphere(self:GetPos(),5)) do
@@ -103,7 +103,7 @@ if SERVER then
 					ent.angles = old_angle
 					v:Remove()
 					timer.Simple(61, function()
-						if !ent:IsValid() then return end
+						if not ent:IsValid() then return end
 						ent:Remove()
 					end)
 					
@@ -190,7 +190,7 @@ if SERVER then
 end
 
 function ENT:SpawnFunction( ply, tr )
-     if ( !tr.Hit ) then return end
+     if ( not tr.Hit ) then return end
 	 self.GBOWNER = ply
      local ent = ents.Create( self.ClassName )
 	 ent:SetPhysicsAttacker(ply)
@@ -202,7 +202,7 @@ end
 
 function ENT:Think()
 	if SERVER then
-		if !self:IsValid() then return end
+		if not self:IsValid() then return end
 		for k, v in pairs(ents.FindInSphere(self:GetPos(),5)) do
 			local phys = v:GetPhysicsObject()
 			if v:GetClass() == "prop_door_rotating" or v:GetClass() == "func_door" or phys:IsValid() then

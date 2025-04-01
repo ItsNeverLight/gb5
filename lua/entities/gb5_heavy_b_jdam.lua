@@ -58,7 +58,7 @@ function ENT:ExploSound(pos)
 end
 
 function ENT:SpawnFunction( ply, tr )
-     if ( !tr.Hit ) then return end
+     if ( not tr.Hit ) then return end
      self.GBOWNER = ply
      local ent = ents.Create( self.ClassName )
      ent:SetPhysicsAttacker(ply)
@@ -70,7 +70,7 @@ function ENT:SpawnFunction( ply, tr )
 end
 
 function ENT:Explode()
-     if !self.Exploded then return end
+     if not self.Exploded then return end
 	 local pos = self:LocalToWorld(self:OBBCenter())
 
    	 local ent = ents.Create("gb5_shockwave_ent")
@@ -111,7 +111,7 @@ function ENT:Explode()
 	 ent:SetVar("Shocktime", self.Shocktime)
 	 
 	 for k, v in pairs(ents.FindInSphere(pos,self.SpecialRadius)) do
-	     if v:IsValid() && !v:IsNPC() then
+	     if v:IsValid() and not v:IsNPC() then
 			 local i = 0
 		     while i < v:GetPhysicsObjectCount() do
 			 phys = v:GetPhysicsObjectNum(i)

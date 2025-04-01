@@ -66,14 +66,14 @@ function ENT:Initialize()
 	 self.Used     = false
 	 self.Arming = false
 	 self.Exploding = false
-	  if !(WireAddon == nil) then self.Inputs   = Wire_CreateInputs(self, { "Arm", "Detonate" }) end
+	  if not (WireAddon == nil) then self.Inputs   = Wire_CreateInputs(self, { "Arm", "Detonate" }) end
 	end
 end
 
 
 
 function ENT:Explode()
-     if !self.Exploded then return end
+     if not self.Exploded then return end
 	 if self.Exploding then return end
 	
 	 local pos = self:LocalToWorld(self:OBBCenter())
@@ -166,13 +166,13 @@ function ENT:Explode()
 		 if trace.HitWorld then
 			 ParticleEffect(self.Effect,pos,Angle(0,0,0),nil)	
 			 timer.Simple(2, function()
-				 if !self:IsValid() then return end 
+				 if not self:IsValid() then return end 
 				 self:Remove()
 		 end)	
 		 else 
 			 ParticleEffect(self.EffectAir,pos,Angle(0,0,0),nil) 
 			 timer.Simple(2, function()
-				 if !self:IsValid() then return end 
+				 if not self:IsValid() then return end 
 				 self:Remove()
 			end)	
 		 end
@@ -180,7 +180,7 @@ function ENT:Explode()
 end
 
 function ENT:SpawnFunction( ply, tr )
-     if ( !tr.Hit ) then return end
+     if ( not tr.Hit ) then return end
 	 self.GBOWNER = ply
      local ent = ents.Create( self.ClassName )
 	 ent:SetPhysicsAttacker(ply)

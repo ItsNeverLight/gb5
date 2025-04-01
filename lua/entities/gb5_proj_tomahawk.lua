@@ -71,21 +71,24 @@ function ENT:Initialize()
 	 self.Ignition = false
 	 self.Arming   = false
 	 self.Power    = 0.8
-	 if !(WireAddon == nil) then self.Inputs = Wire_CreateInputs(self, { "Arm", "Detonate", "Launch" }) end
+	 if not (WireAddon == nil) then self.Inputs = Wire_CreateInputs(self, { "Arm", "Detonate", "Launch" }) end
 	end
 end
 
 function ENT:ExploSound(pos)
-	 local ent = ents.Create("gb5_shockwave_sound_lowsh")
-	 ent:SetPos( pos ) 
-	 ent:Spawn()
-	 ent:Activate()
-	 ent:SetVar("GBOWNER", self.GBOWNER)
-	 ent:SetVar("MAX_RANGE",500000)
-	 ent:SetVar("SHOCKWAVE_INCREMENT",20000)
-	 ent:SetVar("DELAY",0.01)
-	 ent:SetVar("SOUND", self.ExplosionSound)
-	 ent:SetVar("Shocktime",4)
+	local ent = ents.Create("gb5_shockwave_sound_lowsh")
+	if not IsValid(ent) then return end
+
+	ent:SetPos(pos)
+	ent:Spawn()
+	ent:Activate()
+
+	ent.GBOWNER = self.GBOWNER
+	ent.MAX_RANGE = 500000
+	ent.SHOCKWAVE_INCREMENT = 20000
+	ent.DELAY = 0.01
+	ent.SOUND = self.ExplosionSound
+	ent.Shocktime = 4
 end
 
 function ENT:Think()
@@ -98,9 +101,9 @@ function ENT:Think()
 			 phys:AddVelocity(Vector(0,0, vel_up ))
 		 end
 		 if(self.Burnt) then return end
-		 if(!self.Ignition) then return end -- if there wasn't ignition, we won't fly
+		 if(not self.Ignition) then return end -- if there wasn't ignition, we won't fly
 		 if(self.Exploded) then return end -- if we exploded then what the fuck are we doing here
-		 if(!self:IsValid()) then return end -- if we aren't good then something fucked up
+		 if(not self:IsValid()) then return end -- if we aren't good then something fucked up
 		 if self.Power <= 1 then
 			self.Power = self.Power + 0.01
 		 elseif self.Power >=1 then
@@ -168,7 +171,7 @@ function ENT:Launch()
 	 if(self.Fired) then return end
 	 
 	 local phys = self:GetPhysicsObject()
-	 if !phys:IsValid() then return end
+	 if not phys:IsValid() then return end
 	 
 	 self.Fired = true
 	 if(self.SmartLaunch) then
@@ -182,7 +185,7 @@ function ENT:Launch()
 	     end
 	 end)
 	 timer.Simple(self.IgnitionDelay,function()
-	     if not self:IsValid() then return end  -- Make a short ignition delay!
+	     if not self:IsValid() then return end  -- Make a short ignition delaynot 
 		 local phys = self:GetPhysicsObject()
 		 self.Ignition = true
 		 self:Arm()
@@ -194,7 +197,7 @@ function ENT:Launch()
 		 util.ScreenShake( self:GetPos(), 5555, 3555, 10, 500 )
 		 util.ScreenShake( self:GetPos(), 5555, 555, 8, 500 )
 		 util.ScreenShake( self:GetPos(), 5555, 555, 5, 500 )
-		 if(self.FuelBurnoutTime != 0) then 
+		 if(self.FuelBurnoutTime ~= 0) then 
 	         timer.Simple(self.FuelBurnoutTime,function()
 		         if not self:IsValid() then return end 
 		         self.Burnt = true
@@ -207,7 +210,7 @@ function ENT:Launch()
 end
 
 function ENT:SpawnFunction( ply, tr )
-     if ( !tr.Hit ) then return end
+     if ( not tr.Hit ) then return end
 	 self.GBOWNER = ply
      local ent = ents.Create( self.ClassName )
 	 ent:SetPhysicsAttacker(ply)

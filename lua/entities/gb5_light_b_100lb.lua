@@ -1,6 +1,6 @@
 AddCSLuaFile()
 
-DEFINE_BASECLASS( "gb5_base_advanced" )
+DEFINE_BASECLASS( "gb5_base_advanbig" )
 
 local ExploSnds = {}
 ExploSnds[1]                         =  "ambient/explosions/explode_1.wav"
@@ -57,7 +57,7 @@ ENT.DEFAULT_PHYSFORCE_PLYGROUND      = 25
 ENT.Decal                            = "scorch_medium"
 
 function ENT:SpawnFunction( ply, tr )
-     if ( !tr.Hit ) then return end
+     if ( not tr.Hit ) then return end
      self.GBOWNER = ply
      local ent = ents.Create( self.ClassName )
      ent:SetPhysicsAttacker(ply)

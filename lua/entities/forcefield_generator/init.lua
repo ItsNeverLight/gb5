@@ -17,7 +17,7 @@ function ENT:TriggerInput(iname, value)
 	 end
 	 if (iname == "On") then
 		if value == 1 then
-		if self.Activated == 0 && self.Useable == 1 then
+		if self.Activated == 0 and self.Useable == 1 then
 		self.Entity:EmitSound( "buttons/lever4.wav", 62, 100 )
 		timer.Simple(0.32, function() self:EnableUse() end)
 		self.Activated = 1
@@ -25,7 +25,7 @@ function ENT:TriggerInput(iname, value)
 		return end
 		end
 		if value == 0 then
-		if self.Activated == 1 && self.Useable == 1 then
+		if self.Activated == 1 and self.Useable == 1 then
 		self.Entity:EmitSound( "buttons/lever5.wav", 72, 100 )
 		timer.Simple(0.32, function() self:EnableUse() end)
 		self.Activated = 0
@@ -36,12 +36,12 @@ function ENT:TriggerInput(iname, value)
 end 
 
 function ENT:Think()
-	if self.Activated != 1 then 
+	if self.Activated ~= 1 then 
 		for k, v in pairs(self.EntList) do
 			if v:IsValid() then
 				v.forcefielded=false
 			end
-			if !v:IsValid() then
+			if not v:IsValid() then
 				table.remove(self.EntList, k)	
 			end
 		end
@@ -51,13 +51,13 @@ function ENT:Think()
 		self:SetNWBool("on", false)
 		
 	end
-	if (self.Activated==1) && (self.alloweffect==true) then 
+	if (self.Activated==1) and (self.alloweffect==true) then 
 		ParticleEffectAttach("forcefield_warp_idle",PATTACH_ABSORIGIN_FOLLOW,self,0) 
 		self.alloweffect=false
 		self:SetNWBool("on", true)
 	end
 	self:SetNWInt("field_range", self.Range)
-	if self.Activated != 1 then return end
+	if self.Activated ~= 1 then return end
 	self.TotalList={}
 	if self.Range >= GetConVar("gb5_maxforcefield_range"):GetInt() then
 		self.Range=GetConVar("gb5_maxforcefield_range"):GetInt()
@@ -68,7 +68,7 @@ function ENT:Think()
 		if v:IsNPC() or v:IsPlayer() then
 			table.insert(self.TotalList, v )
 		end
-		if !v:IsPlayer() or !v:IsNPC()then	 
+		if not v:IsPlayer() or not v:IsNPC()then	 
 			if v.Armed or v.Arming or v:GetClass() == "npc_grenade_frag" then
 				 local mass = phys:GetMass()
 				 local F_ang = 5000
@@ -80,23 +80,23 @@ function ENT:Think()
 				 ParticleEffectAttach("forcefield_warp_flash",PATTACH_ABSORIGIN_FOLLOW,v,0) 
 				 sound.Play("ambient/energy/ion_cannon_shot3.wav", v:GetPos(), 100, 100, 1)
 			else 
-				if !table.HasValue(self.TotalList,v) then
+				if not table.HasValue(self.TotalList,v) then
 					table.insert(self.TotalList, v )
 				end
 			end				
 		end
 	end
 	for k, v in pairs(self.TotalList) do
-		if v:IsValid() && !table.HasValue(self.EntList,v) then
+		if v:IsValid() and not table.HasValue(self.EntList,v) then
 			table.insert(self.EntList, v )
 			v.forcefielded=true
 		end
-		if !v:IsValid() then
+		if not v:IsValid() then
 			table.remove(self.EntList, k)	
 		end
 	end
 	for k_, v_ in pairs(self.EntList) do
-		if !table.HasValue(self.TotalList, v_) then
+		if not table.HasValue(self.TotalList, v_) then
 			table.remove(self.EntList, k_)
 			v_.forcefielded=false
 			
@@ -129,13 +129,13 @@ function ENT:Initialize()
 	self.EntList={}
 	self.EntCount=0
 	self.alloweffect=true
-	if !(WireAddon == nil) then 
+	if not (WireAddon == nil) then 
 		self.Inputs   = Wire_CreateInputs(self, { "Range", "On"}) 
 	end
 end
 
 function ENT:SpawnFunction( ply, tr )
-	if ( !tr.Hit ) then return end
+	if ( not tr.Hit ) then return end
 	local SpawnPos = tr.HitPos + tr.HitNormal * 16
 	local ent = ents.Create( "forcefield_generator" )
 	ent:SetPos( SpawnPos )
@@ -149,13 +149,13 @@ self.Useable = 1
 end
 
 function ENT:Use( activator, caller )
-	if self.Activated == 0 && self.Useable == 1 then
+	if self.Activated == 0 and self.Useable == 1 then
 		self.Entity:EmitSound( "buttons/lever4.wav", 62, 100 )
 		timer.Simple(0.32, function() self:EnableUse() end)
 		self.Activated = 1
 		self.Useable = 0
 	return end
-	if self.Activated == 1 && self.Useable == 1 then
+	if self.Activated == 1 and self.Useable == 1 then
 		self.Entity:EmitSound( "buttons/lever5.wav", 72, 100 )
 		timer.Simple(0.32, function() self:EnableUse() end)
 		self.Activated = 0

@@ -67,61 +67,61 @@ end
 
 function ENT:Explode()
     if not self.Exploded then return end
-	if self.Exploding then return end
-	
-	local pos = self:LocalToWorld(self:OBBCenter())
-	self:SetModel("models/gibs/scanner_gib02.mdl")
-	self.Exploding = true
-	constraint.RemoveAll(self)
-	local physo = self:GetPhysicsObject()
-	physo:Wake()
-	physo:EnableMotion(false)
-	local ent = ents.Create("gb5_shockwave_sound_lowsh")
-	ent:SetPos( pos ) 
-	ent:Spawn()
-	ent:Activate()
-	ent:SetVar("GBOWNER", self.GBOWNER)
-	ent:SetVar("MAX_RANGE",500000)
-	ent:SetVar("SHOCKWAVE_INCREMENT",20000)
-	ent:SetVar("DELAY",0.01)
-	ent:SetVar("Shocktime",5)
-	ent:SetVar("SOUND", "gbombs_5/explosions/special/endothermic_bomb.mp3")
-	self.affected = {}
-	for k, v in pairs(ents.FindInSphere(pos,1800)) do
-		if v:IsPlayer() then	
-			table.insert(self.affected, v)
-		end
-	end
+    if self.Exploding then return end
+    
+    local pos = self:LocalToWorld(self:OBBCenter())
+    self:SetModel("models/gibs/scanner_gib02.mdl")
+    self.Exploding = true
+    constraint.RemoveAll(self)
+    local physo = self:GetPhysicsObject()
+    physo:Wake()
+    physo:EnableMotion(false)
+    local ent = ents.Create("gb5_shockwave_sound_lowsh")
+    ent:SetPos(pos)
+    ent:Spawn()
+    ent:Activate()
+    ent:SetVar("GBOWNER", self.GBOWNER)
+    ent:SetVar("MAX_RANGE", 500000)
+    ent:SetVar("SHOCKWAVE_INCREMENT", 20000)
+    ent:SetVar("DELAY", 0.01)
+    ent:SetVar("Shocktime", 5)
+    ent:SetVar("SOUND", "gbombs_5/explosions/special/endothermic_bomb.mp3")
+    self.affected = {}
+    for k, v in pairs(ents.FindInSphere(pos, 1800)) do
+        if v:IsPlayer() then
+            table.insert(self.affected, v)
+        end
+    end
 
-	timer.Simple(2.5, function()
-		if not self:IsValid() then return end
-		local ent = ents.Create("gb5_shockwave_sound_lowsh")
-		ent:SetPos( pos ) 
-		ent:Spawn()
-		ent:Activate()
-		ent:SetVar("nil", self.GBOWNER)
-		ent:SetVar("MAX_RANGE",1500)
-		ent:SetVar("SHOCKWAVE_INCREMENT",100)
-		ent:SetVar("DELAY",0.01)
-		ent:SetVar("Shocktime",1)
-		ent:SetVar("SOUND", "gbombs_5/explosions/special/endothermic_freeze.wav")
-		
-		local ent = ents.Create("gb5_shockwave_cold")
-		ent:SetPos( pos ) 
-		ent:Spawn()
-		ent:Activate()
-		ent:SetVar("DEFAULT_PHYSFORCE", 25)
-		ent:SetVar("DEFAULT_PHYSFORCE_PLYAIR", 25)
-		ent:SetVar("DEFAULT_PHYSFORCE_PLYGROUND", 25)
-		ent:SetVar("nil", self.GBOWNER)
-		ent:SetVar("MAX_RANGE", 1500)
-		ent:SetVar("SHOCKWAVE_INCREMENT",100)
-		ent:SetVar("DELAY",0.1)
-		timer.Simple(10, function()
-			if not self:IsValid() then return end
-			self:Remove()
-		end)
-	end)
+    timer.Simple(2.5, function()
+        if not self:IsValid() then return end
+        local ent = ents.Create("gb5_shockwave_sound_lowsh")
+        ent:SetPos(pos)
+        ent:Spawn()
+        ent:Activate()
+        ent:SetVar("GBOWNER", self.GBOWNER)
+        ent:SetVar("MAX_RANGE", 1500)
+        ent:SetVar("SHOCKWAVE_INCREMENT", 100)
+        ent:SetVar("DELAY", 0.01)
+        ent:SetVar("Shocktime", 1)
+        ent:SetVar("SOUND", "gbombs_5/explosions/special/endothermic_freeze.wav")
+
+        local ent = ents.Create("gb5_shockwave_cold")
+        ent:SetPos(pos)
+        ent:Spawn()
+        ent:Activate()
+        ent:SetVar("DEFAULT_PHYSFORCE", 25)
+        ent:SetVar("DEFAULT_PHYSFORCE_PLYAIR", 25)
+        ent:SetVar("DEFAULT_PHYSFORCE_PLYGROUND", 25)
+        ent:SetVar("GBOWNER", self.GBOWNER)
+        ent:SetVar("MAX_RANGE", 1500)
+        ent:SetVar("SHOCKWAVE_INCREMENT", 100)
+        ent:SetVar("DELAY", 0.1)
+        timer.Simple(10, function()
+            if not self:IsValid() then return end
+            self:Remove()
+        end)
+    end)
 	if(self:WaterLevel() >= 1) then
 		local trdata   = {}
 		local trlength = Vector(0,0,9000)

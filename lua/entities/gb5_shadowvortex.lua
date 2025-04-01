@@ -42,7 +42,7 @@ function ENT:Think()
 		hook.Add( "HUDPaint", "Shadowvortex", Shadowvortex)
 	end
 	if (SERVER) then
-	if !self:IsValid() then return end
+	if not self:IsValid() then return end
 	local pos = self:GetPos()
 	self.TotalList={}
 	for k, v in pairs(ents.FindInSphere(pos,590)) do
@@ -58,7 +58,7 @@ function ENT:Think()
 				v:Remove()
 			end
 		end
-		if v:IsPlayer() and !(v==self.radowner) then
+		if v:IsPlayer() and not (v==self.radowner) then
 			local pos = v:GetPos()
 			local mod_pos = pos-Vector(0,0,0.89)
 			v:SetMoveType(MOVETYPE_FLY)
@@ -85,7 +85,7 @@ function ENT:Think()
 
 	for k, v in pairs(self.TotalList) do
 		if v:IsValid() then 
-			if !table.HasValue(self.EntList,v) then
+			if not table.HasValue(self.EntList,v) then
 				if v:IsPlayer() then
 					table.insert(self.EntList, v )
 				end
@@ -94,7 +94,7 @@ function ENT:Think()
 	end
 	for index, entlist_ply in pairs(self.EntList) do
 		if entlist_ply:IsValid() then
-			if !table.HasValue(self.TotalList, entlist_ply ) then
+			if not table.HasValue(self.TotalList, entlist_ply ) then
 				if entlist_ply:IsValid() then
 					table.remove(self.EntList, index)
 					entlist_ply.accumilation=0

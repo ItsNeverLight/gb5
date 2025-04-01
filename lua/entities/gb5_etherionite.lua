@@ -22,7 +22,7 @@ end
 
 function ENT:Think()
 	if (SERVER) then
-	if !self:IsValid() then return end
+	if not self:IsValid() then return end
 	local pos = self:GetPos()
 
 	for k, v in pairs(ents.FindInSphere(self:GetPos(), 80000)) do

@@ -27,7 +27,7 @@ end
 
 function ENT:Think()
      if (SERVER) then
-     if !self:IsValid() then return end
+     if not self:IsValid() then return end
 	 local pos = self:GetPos()
 	 local dmg = DamageInfo()
 	 dmg:SetDamage(math.random(1,8))
@@ -35,12 +35,12 @@ function ENT:Think()
 	 if self.GBOWNER == nil then
 		self.GBOWNER = table.Random(player.GetAll())
 	 end
-	 if !self.GBOWNER:IsValid() then
+	 if not self.GBOWNER:IsValid() then
 		self.GBOWNER = table.Random(player.GetAll())
 	 end
 	 dmg:SetAttacker(self.GBOWNER)
 	 for k, v in pairs(ents.FindInSphere(pos,1400)) do
-         if (v:IsPlayer() && v:IsOnGround() && v:Alive()) or v:IsNPC() then
+         if (v:IsPlayer() and v:IsOnGround() and v:Alive()) or v:IsNPC() then
 			if v:GetClass()=="helicopter" then return end
 		    v:TakeDamageInfo(dmg)
 			v:EmitSound("player/pl_burnpain3.wav")

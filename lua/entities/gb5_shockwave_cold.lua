@@ -72,6 +72,7 @@ function ENT:Think(ply)
 			 while i < v:GetPhysicsObjectCount() do
 				 phys = v:GetPhysicsObjectNum(i)
 				 if (phys:IsValid()) then
+					 local mass = phys:GetMass()
 					 local F_ang = self.DEFAULT_PHYSFORCE
 					 local dist = (pos - v:GetPos()):Length()
 					 local relation = math.Clamp((self.CURRENTRANGE - dist) / self.CURRENTRANGE, 0, 1)
@@ -82,7 +83,8 @@ function ENT:Think(ply)
 				 if (v:IsPlayer() and v:Alive()) then
 					 v:Freeze(true)
 					 v:ConCommand("cold_max")
-					 v:SetMoveType( MOVETYPE_WALK )
+					 v:SetMoveType( MOVETYPE_WALK )				     
+					 local mass = phys:GetMass()
 					 local F_ang = self.DEFAULT_PHYSFORCE_PLYAIR
 					 local dist = (pos - v:GetPos()):Length()
 					 local relation = math.Clamp((self.CURRENTRANGE - dist) / self.CURRENTRANGE, 0, 1)

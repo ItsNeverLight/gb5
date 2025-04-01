@@ -37,15 +37,15 @@ end
 
 function ENT:Think()
 	if (SERVER) then
-	if !self:IsValid() then return end
-	if !self.radowner:Alive() then
+	if not self:IsValid() then return end
+	if not self.radowner:Alive() then
 		self:Remove()
 	end
 	if self.radowner:IsValid() then 
 		if self.initialised==nil then
 			self.initialised=true
 			timer.Simple(2, function()
-				if !self.radowner:IsValid() then return end		
+				if not self.radowner:IsValid() then return end		
 				self.radowner:EmitSound("ambience/_cache_/bin_32/whiteshadow_mode.wav", 100, 100)
 			end)
 			self.radowner:EmitSound("whiteshadow", 100, 100)

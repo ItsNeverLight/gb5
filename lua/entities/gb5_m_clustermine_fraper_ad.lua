@@ -45,16 +45,16 @@ ENT.GBOWNER                          =  nil             -- don't you fucking tou
 
 function ENT:PhysicsCollide( data, physobj )
      if(self.Exploded) then return end
-     if(!self:IsValid()) then return end
+     if(not self:IsValid()) then return end
 	 if(self.Life <= 0) then return end
 	 if(GetConVar("gb5_fragility"):GetInt() >= 1) then
 	     if(data.Speed > self.ImpactSpeed) then
-	 	     if(!self.Armed and !self.Arming) then
+	 	     if(not self.Armed and not self.Arming) then
 	             self:Arm()
 	         end
 		 end
 	 end
-	 if(!self.Armed) then return end
+	 if(not self.Armed) then return end
 	 local pusher = data.HitEntity
 	 if (pusher:IsWorld() == true) then return end
 	 local phys = pusher:GetPhysicsObject()
@@ -66,7 +66,7 @@ function ENT:PhysicsCollide( data, physobj )
 end
 
 function ENT:Explode()
-     if !self.Exploded then return end
+     if not self.Exploded then return end
 	 if self.Exploding then return end
 	
 	 local pos = self:LocalToWorld(self:OBBCenter())
@@ -75,7 +75,7 @@ function ENT:Explode()
 	 local physo = self:GetPhysicsObject()
 	 physo:Wake()	
 	 self.Exploding = true
-	 if !self:IsValid() then return end 
+	 if not self:IsValid() then return end 
 	 self:StopParticles()
 	 local pos = self:LocalToWorld(self:OBBCenter())
 	 
@@ -165,13 +165,13 @@ function ENT:Explode()
 		 if trace.HitWorld then
 			 ParticleEffect(self.Effect,pos,Angle(0,0,0),nil)	
 			 timer.Simple(0.1, function()
-				 if !self:IsValid() then return end 
+				 if not self:IsValid() then return end 
 				 self:Remove()
 				 
 			 end)
 		 else 
 			 ParticleEffect(self.EffectAir,self:GetPos(),Angle(0,0,0),nil) 
-			 if !self:IsValid() then return end 
+			 if not self:IsValid() then return end 
 				self:Remove()
 		 end
 	 end
@@ -179,7 +179,7 @@ end
 
 
 function ENT:SpawnFunction( ply, tr )
-     if ( !tr.Hit ) then return end
+     if ( not tr.Hit ) then return end
 	 self.GBOWNER = ply
      local ent = ents.Create( self.ClassName )
 	 ent:SetPhysicsAttacker(ply)

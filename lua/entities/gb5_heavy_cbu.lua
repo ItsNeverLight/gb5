@@ -64,12 +64,12 @@ function ENT:Initialize()
 	 self.Used     = false
 	 self.Arming = false
 	 self.Exploding = false
-	  if !(WireAddon == nil) then self.Inputs   = Wire_CreateInputs(self, { "Arm", "Detonate" }) end
+	  if not (WireAddon == nil) then self.Inputs   = Wire_CreateInputs(self, { "Arm", "Detonate" }) end
 	end
 end
 
 function ENT:Explode()
-     if !self.Exploded then return end
+     if not self.Exploded then return end
 	 if self.Exploding then return end
 	
 	 local pos = self:LocalToWorld(self:OBBCenter())
@@ -78,7 +78,7 @@ function ENT:Explode()
 	 local physo = self:GetPhysicsObject()
 	 physo:Wake()	
 	 self.Exploding = true
-	 if !self:IsValid() then return end 
+	 if not self:IsValid() then return end 
 	 self:StopParticles()
 	 local pos = self:LocalToWorld(self:OBBCenter())
 	 
@@ -152,7 +152,7 @@ function ENT:Explode()
 		 end
 	 end
 	 for k, v in pairs(ents.FindInSphere(pos,self.SpecialRadius)) do
-		 if v:IsValid() && (v != self) then
+		 if v:IsValid() and (v ~= self) then
 			 local phys = v:GetPhysicsObject()
 			 if (phys:IsValid()) then
 				 local mass = phys:GetMass()
@@ -203,20 +203,20 @@ function ENT:Explode()
 		 if trace.HitWorld then
 			 ParticleEffect(self.Effect,pos,Angle(0,0,0),nil)	
 			 timer.Simple(0.1, function()
-				 if !self:IsValid() then return end 
+				 if not self:IsValid() then return end 
 				 self:Remove()
 				 
 			 end)
 		 else 
 			 ParticleEffect(self.EffectAir,self:GetPos(),Angle(0,0,0),nil) 
-			 if !self:IsValid() then return end 
+			 if not self:IsValid() then return end 
 				self:Remove()
 		 end
 	 end
 end
 
 function ENT:SpawnFunction( ply, tr )
-     if ( !tr.Hit ) then return end
+     if ( not tr.Hit ) then return end
 	 self.GBOWNER = ply
      local ent = ents.Create( self.ClassName )
 	 ent:SetPhysicsAttacker(ply)

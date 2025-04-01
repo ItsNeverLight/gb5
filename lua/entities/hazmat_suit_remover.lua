@@ -13,7 +13,7 @@ ENT.AdminOnly		= true
 ENT.Contact			                 =  ""  
 
 function ENT:SpawnFunction( ply, tr )
-	if ( !tr.Hit ) then return end
+	if ( not tr.Hit ) then return end
 	local SpawnPos = tr.HitPos + tr.HitNormal * 16
 	local ent = ents.Create( "hazmat_suit_remover" )
 	ent:SetPos( SpawnPos )
@@ -40,7 +40,15 @@ if SERVER then
 		ent:SetAngles(Angle(0,180,0))
 		ent:Spawn()
 		ent:Activate()
-		ent:SetParent( self )
+		ent:SetParent( self ) 
+		
+		local ent = ents.Create( "prop_physics" )
+		ent:SetModel("models/Items/hevsuit.mdl")
+		ent:SetPos( Vector(self:GetPos().x,self:GetPos().y,self:GetPos().z+24 ))
+		ent:Spawn()
+		ent:Activate()
+		ent:SetParent( self ) 
+		
 	end
 end
 
@@ -81,7 +89,7 @@ if CLIENT then
 	function ENT:Draw()
 		self.Entity:DrawModel()
 		local squad = self:GetNetworkedString( 12 )
-		if ( LocalPlayer():GetEyeTrace().Entity == self.Entity && EyePos():Distance( self.Entity:GetPos() ) < 256 ) then
+		if ( LocalPlayer():GetEyeTrace().Entity == self.Entity and EyePos():Distance( self.Entity:GetPos() ) < 256 ) then
 		AddWorldTip( self.Entity:EntIndex(), ( "Hazmat Suit Remover" ), 0.5, self.Entity:GetPos(), self.Entity  )
 		end
 	end

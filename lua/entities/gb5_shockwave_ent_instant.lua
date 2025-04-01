@@ -47,6 +47,7 @@ function ENT:Think(ply)
 			         dmg:SetAttacker(self.GBOWNER)
 				 phys = v:GetPhysicsObjectNum(i)
 				 if (phys:IsValid()) then
+					 local mass = phys:GetMass()
 					 local F_ang = self.DEFAULT_PHYSFORCE
 					 local dist = (pos - v:GetPos()):Length()
 					 local relation = math.Clamp((self.CURRENTRANGE - dist) / self.CURRENTRANGE, 0, 1)
@@ -60,8 +61,10 @@ function ENT:Think(ply)
 					 end
 				 end
 				 if (v:IsPlayer()) then
+					
 					 v:SetMoveType( MOVETYPE_WALK )
 				     v:TakeDamageInfo(dmg)
+					 local mass = phys:GetMass()
 					 local F_ang = self.DEFAULT_PHYSFORCE_PLYAIR
 					 local dist = (pos - v:GetPos()):Length()
 					 local relation = math.Clamp((self.CURRENTRANGE - dist) / self.CURRENTRANGE, 0, 1)
@@ -72,6 +75,7 @@ function ENT:Think(ply)
 				 if (v:IsPlayer()) and v:IsOnGround() then
 					 v:SetMoveType( MOVETYPE_WALK )
 				     v:TakeDamageInfo(dmg)
+					 local mass = phys:GetMass()
 					 local F_ang = self.DEFAULT_PHYSFORCE_PLYGROUND
 					 local dist = (pos - v:GetPos()):Length()
 					 local relation = math.Clamp((self.CURRENTRANGE - dist) / self.CURRENTRANGE, 0, 1)

@@ -24,7 +24,7 @@ function ENT:Initialize()
 end
 function ENT:Think()
      if (SERVER) then
-     if !self:IsValid() then return end
+     if not self:IsValid() then return end
 	 local pos = self:GetPos()
 	 local dmg = DamageInfo()
 	 dmg:SetDamage(math.random(1,2)*self.DAMAGE_MUL)
@@ -36,7 +36,7 @@ function ENT:Think()
 		    v:TakeDamageInfo(dmg)
 		    timer.Simple(math.random(), function()
 		   	v:EmitSound("player/geiger2.wav", 100, 100)
-			if !v:IsNPC() then
+			if not v:IsNPC() then
 				v:ConCommand("Rad")
 			end
 		    end)

@@ -51,7 +51,7 @@ ENT.Shocktime                        = 1
 ENT.GBOWNER                          =  nil           
 ENT.Decal                            = "scorch_small"
 function ENT:SpawnFunction( ply, tr )
-     if ( !tr.Hit ) then return end
+     if ( not tr.Hit ) then return end
      self.GBOWNER = ply
      local ent = ents.Create( self.ClassName )
      ent:SetPhysicsAttacker(ply)

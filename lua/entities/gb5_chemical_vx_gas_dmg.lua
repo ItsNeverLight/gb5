@@ -15,7 +15,7 @@ ENT.DAMAGE_MUL = 1
 
 function ENT:gb5_ragdoll(ply, mode) -- This is so fucking messy, but it's worth the 'weight'.
 	if ( mode == 1 ) then
-		if ( ply:Alive() && !ply.Ragdolled) then
+		if ( ply:Alive() and not ply.Ragdolled) then
 			ply.spaz = false
 			ply:DrawViewModel( false )
 			ply:StripWeapons()
@@ -44,7 +44,7 @@ function ENT:gb5_ragdoll(ply, mode) -- This is so fucking messy, but it's worth 
 			end)
 		end
 	else
-		if ( ply:Alive() && ply.AllowSpawn ) then
+		if ( ply:Alive() and ply.AllowSpawn ) then
 			ply.Ragdolled = false
 			ply:SetNoTarget( false )
 			ply.AllowSpawn = true
@@ -57,7 +57,7 @@ function ENT:gb5_ragdoll(ply, mode) -- This is so fucking messy, but it's worth 
 		if doll:IsValid() then
 			doll:Remove()
 		end
-		if ( !ply:Alive() && ply.AllowSpawn ) then
+		if ( not ply:Alive() and ply.AllowSpawn ) then
 			
 			ply.Ragdolled = false
 			ply:SetNoTarget( false )
@@ -88,16 +88,16 @@ end
 
 function ENT:Think()
      if (SERVER) then
-     if !self:IsValid() then return end
+     if not self:IsValid() then return end
 	 local pos = self:GetPos()
 	 local dmg = DamageInfo()
 	 for k, v in pairs(ents.FindInSphere(pos,300)) do
-         if (v:IsPlayer() and v:Alive() and !(table.HasValue(self.AffectPlayers,v))) and v.gasmasked==false then		
+         if (v:IsPlayer() and v:Alive() and not (table.HasValue(self.AffectPlayers,v))) and v.gasmasked==false then		
 			table.insert(self.AffectPlayers, v)
 		 end
 	 end
 	 for k, v in pairs(self.AffectPlayers) do
-		if !v.spaz and v:IsValid() then
+		if not v.spaz and v:IsValid() then
 			ply = v 
 			ply.spaz = false
 		    self:gb5_ragdoll(ply, 1)
@@ -108,7 +108,7 @@ function ENT:Think()
 			v.shouldspaz = false
 			local phys = v:GetPhysicsObject()
 			local i = 0
-			if v:IsValid() && !v.spazremove then
+			if v:IsValid() and not v.spazremove then
 				phys:AddAngleVelocity(Vector(math.random(1,1500),math.random(1,1500),math.random(1,1500)))
 				timer.Simple(0.4, function()
 					if v:IsValid() then
@@ -165,13 +165,13 @@ if SERVER then
 				self:gb5_ragdoll(ply, 0)
 				v.Ragdolled = false
 				for k, v in pairs(self.RagDolls) do
-					if v:IsValid() && v.owner==ply then
+					if v:IsValid() and v.owner==ply then
 						v:Remove()
 					end
 				end
 			else
 				for k, ragdoll in pairs(self.RagDolls) do
-					if !ragdoll.owner:IsValid() && ragdoll:IsValid() then
+					if not ragdoll.owner:IsValid() and ragdoll:IsValid() then
 						ragdoll:Remove()
 					end
 				end

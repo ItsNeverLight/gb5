@@ -103,7 +103,7 @@ end
 
 function ENT:Think()
 	if (SERVER) then
-		if !self:IsValid() then return end
+		if not self:IsValid() then return end
 		if GetConVarNumber( "gb5_nuke_light" )==0 then return end
 		self.TimePassed=self.TimePassed+0.01
 		self:Initialise_Static()

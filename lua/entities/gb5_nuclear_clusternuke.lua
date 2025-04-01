@@ -61,13 +61,13 @@ function ENT:Initialize()
 	 self.Used     = false
 	 self.Arming = false
 	 self.Exploding = false
-	  if !(WireAddon == nil) then self.Inputs   = Wire_CreateInputs(self, { "Arm", "Detonate" }) end
+	  if not (WireAddon == nil) then self.Inputs   = Wire_CreateInputs(self, { "Arm", "Detonate" }) end
 	end
 end
 
 function ENT:PhysicsCollide( data, physobj )
      if(self.Exploded) then return end
-     if(!self:IsValid()) then return end
+     if(not self:IsValid()) then return end
 	 if(self.Life <= 0) then return end
 	 if(data.Speed > 200) then
 		if math.random(1,2)==1 then
@@ -78,13 +78,13 @@ function ENT:PhysicsCollide( data, physobj )
 	 end
 	 if(GetConVar("gb5_fragility"):GetInt() >= 1) then
 	     if(data.Speed > self.ImpactSpeed) then
-	 	     if(!self.Armed and !self.Arming) then
+	 	     if(not self.Armed and not self.Arming) then
 
 	             self:Arm()
 	         end
 		 end
 	 end
-	 if(!self.Armed) then return end
+	 if(not self.Armed) then return end
      if self.ShouldExplodeOnImpact then
 	     if (data.Speed > self.ImpactSpeed ) then
 			 self.Exploded = true
@@ -94,7 +94,7 @@ function ENT:PhysicsCollide( data, physobj )
 end
 
 function ENT:Explode()
-     if !self.Exploded then return end
+     if not self.Exploded then return end
 	 if self.Exploding then return end
 	 local pos = self:GetPos()
 	 
@@ -193,7 +193,7 @@ function ENT:Explode()
 	 end
 	 for k, v in pairs(ents.FindInSphere(pos,self.SpecialRadius*2)) do
 		if (v:IsValid() or v:IsPlayer()) and (v.forcefielded==false or v.forcefielded==nil) then
-			if v:IsPlayer() && v:Alive() then
+			if v:IsPlayer() and v:Alive() then
 			    v:SetModel("models/Humans/Charple04.mdl")
 				v:Kill()
 				ParticleEffectAttach("nuke_player_vaporize_fatman",PATTACH_POINT_FOLLOW,v,0) 
@@ -202,7 +202,7 @@ function ENT:Explode()
 	 end
 	
   	 timer.Simple(2, function()
-	     if !self:IsValid() then return end 
+	     if not self:IsValid() then return end 
 		 constraint.RemoveAll(self)
 		 util.ScreenShake( pos, 55555, 255, 10, 121000 )
 		 self:StopParticles()
@@ -239,7 +239,7 @@ function ENT:Explode()
 		     if trace.HitWorld then
 		         ParticleEffect(self.Effect,pos,Angle(0,0,0),nil)	
 			     timer.Simple(2, function()
-			         if !self:IsValid() then return end 
+			         if not self:IsValid() then return end 
 			         ParticleEffect("",trace.HitPos,Angle(0,0,0),nil)	
 				     self:Remove()
              end)	
@@ -247,7 +247,7 @@ function ENT:Explode()
 			     ParticleEffect(self.EffectAir,pos,Angle(0,0,0),nil) 
 				 --Here we do an emp check
 				 timer.Simple(2, function()
-					 if !self:IsValid() then return end 
+					 if not self:IsValid() then return end 
 					 ParticleEffect("",trace.HitPos,Angle(0,0,0),nil)	
 					 self:Remove()
 				end)	
@@ -262,7 +262,7 @@ function ENT:Explode()
 end
 
 function ENT:SpawnFunction( ply, tr )
-     if ( !tr.Hit ) then return end
+     if ( not tr.Hit ) then return end
 	 self.GBOWNER = ply
      local ent = ents.Create( self.ClassName )
 	 ent:SetPhysicsAttacker(ply)
